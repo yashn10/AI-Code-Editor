@@ -10,11 +10,16 @@ import AppSidebar from "@/components/custom/AppSidebar"
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import ActionContext from '@/context/ActionContext'
+import { useRouter } from 'next/navigation'
 
 const Provider = ({ children }) => {
 
+    const router = useRouter();
+
     const [message, setmessage] = useState();
     const [user, setUser] = useState();
+    const [action, setAction] = useState();
     const convex = useConvex();
 
     useEffect(() => {
@@ -29,6 +34,8 @@ const Provider = ({ children }) => {
                 const result = await convex.query(api.users.GetUser, { email: user.email });
                 console.log(result);
                 setUser(result);
+            } else {
+                router.push("/Main");
             }
         }
     }
@@ -38,18 +45,20 @@ const Provider = ({ children }) => {
             <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_AUTH_CLIENT_ID}>
                 <UserContext.Provider value={{ user, setUser }}>
                     <MessagesContext.Provider value={{ message, setmessage }}>
-                        <NextThemesProvider
-                            attribute="class"
-                            defaultTheme="dark"
-                            enableSystem
-                            disableTransitionOnChange
-                        >
-                            <Header />
-                            <SidebarProvider defaultOpen={false}>
-                                <AppSidebar />
-                                {children}
-                            </SidebarProvider>
-                        </NextThemesProvider>
+                        <ActionContext.Provider value={{ action, setAction }}>
+                            <NextThemesProvider
+                                attribute="class"
+                                defaultTheme="dark"
+                                enableSystem
+                                disableTransitionOnChange
+                            >
+                                <Header />
+                                <SidebarProvider defaultOpen={false}>
+                                    <AppSidebar />
+                                    {children}
+                                </SidebarProvider>
+                            </NextThemesProvider>
+                        </ActionContext.Provider>
                     </MessagesContext.Provider>
                 </UserContext.Provider>
             </GoogleOAuthProvider>

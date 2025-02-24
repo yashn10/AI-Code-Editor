@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
 
-    <div className='flex justify-between items-center p-4'>
+    <div className='flex items-center p-4' style={{ justifyContent: "space-around" }}>
       <h1>Header</h1>
 
       <div className='flex gap-5'>
@@ -19,12 +19,18 @@ const Header = () => {
         <h1 className='cursor-pointer'>Feedback</h1>
       </div>
 
-      {!user &&
-        <div className='gap-2 flex'>
-          <Button variant="outline">Sign In</Button>
-          <Button variant="secondary">Sign Up</Button>
-        </div>
-      }
+
+      <div className='gap-2 flex'>
+        <Link href={'/Main'} className='cursor-pointer'>
+          <Button variant="outline">New Project</Button>
+        </Link>
+        {!user &&
+          <>
+            <Button variant="outline">Sign In</Button>
+            <Button variant="secondary">Sign Up</Button>
+          </>
+        }
+      </div>
     </div>
 
   )

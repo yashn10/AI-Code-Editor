@@ -1,10 +1,15 @@
-import Main from "@/components/custom/Main";
-import Image from "next/image";
+"use client"
+
+// import Main from "@/components/custom/Main";
+import HomePage from "./(Main)/Home/page";
 
 export default function Home() {
   return (
 
-    <Main />
+    <>
+      <HomePage />
+      {/* <Main /> */}
+    </>
 
   );
 }

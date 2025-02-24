@@ -4,7 +4,7 @@ import MessagesContext from '@/context/MessagesContext';
 import UserContext from '@/context/UserContext';
 import { ArrowRight } from 'lucide-react'
 import React, { useState, useContext } from 'react'
-import Signin from './Signin';
+import Signin from '../../../components/custom/Signin';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useRouter } from 'next/navigation';
