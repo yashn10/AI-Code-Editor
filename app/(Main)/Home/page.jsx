@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
+import Link from 'next/link';
 // import Footer from '../components/Footer'; // Uncomment if you have a Footer component
 
 const HomePage = () => {
@@ -33,9 +34,9 @@ const HomePage = () => {
                         <p className="text-2xl mb-8">
                             AI-powered code generation and live preview in your browser.
                         </p>
-                        <button className="bg-white text-blue-500 py-3 px-6 rounded-full text-xl font-semibold hover:shadow-md transition-shadow duration-300">
+                        <Link href="/Main" className="bg-white text-blue-500 py-3 px-6 rounded-full text-xl font-semibold hover:shadow-md transition-shadow duration-300">
                             Get Started
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -127,9 +128,9 @@ const HomePage = () => {
                                 Unleash your creativity and let AI handle the tedious setup.
                             </p>
                         </div>
-                        <button className="bg-blue-500 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-600 transition-colors duration-300">
+                        <Link href="/Main" className="bg-blue-500 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-600 transition-colors duration-300">
                             Create Your Project
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </section>
