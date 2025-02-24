@@ -7,6 +7,7 @@ const schema = defineSchema({
         name: v.string(),
         email: v.string(),
         image: v.string(),
+        token: v.optional(v.number()),
     }),
 
     workspace: defineTable({

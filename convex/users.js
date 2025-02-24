@@ -19,6 +19,7 @@ export const CreateUser = mutation({
                 name: args.name,
                 email: args.email,
                 image: args.image,
+                token: 50000
             });
 
             console.log(newUser);
@@ -35,5 +36,18 @@ export const GetUser = query({
         const user = await ctx.db.query('users').filter((user) => user.eq(user.field('email'), args.email)).collect();
         // console.log(user);
         return user[0];
+    }
+})
+
+export const updateToken = mutation({
+    args: {
+        token: v.number(),
+        _id: v.id('users'),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            token: args.token
+        });
+        return result;
     }
 })

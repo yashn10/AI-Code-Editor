@@ -43,7 +43,7 @@ const Main = () => {
 
   return (
 
-    <div className='flex flex-col text-center justify-center items-center' style={{ height: '80vh' }}>
+    <div className='flex flex-col text-center justify-center items-center w-full' style={{ height: '80vh' }}>
       <h1 className='font-bold text-3xl'>What do you want to build ?</h1>
       <p className='text-xl mt-2'>Start editing to see some magic happen!</p>
 

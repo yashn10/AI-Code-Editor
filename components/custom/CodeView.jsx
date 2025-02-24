@@ -16,16 +16,19 @@ import { useConvex, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useParams } from 'next/navigation';
 import { Loader2Icon } from 'lucide-react';
+import UserContext from '@/context/UserContext';
 
 const CodeView = () => {
 
     const { id } = useParams();
+    const { user, setUser } = useContext(UserContext);
     const [activeTab, setactiveTab] = useState('code');
     const [files, setfiles] = useState(Lookup.DEFAULT_FILE);
     const { message, setmessage } = useContext(MessagesContext);
     const updateFiles = useMutation(api.workspace.updateFiles);
     const [loading, setloading] = useState(false);
     const convex = useConvex();
+    const updateTokens = useMutation(api.users.updateToken);
 
     useEffect(() => {
         fetchFiles();
@@ -54,11 +57,19 @@ const CodeView = () => {
     }, [message])
 
 
+    const countTokens = (text) => {
+        if (typeof text !== 'string') {
+            return 0;
+        }
+        return text.trim().split(/\s+/).length;
+    }
+
+
     const generateCode = async () => {
         setloading(true);
         const prompt = JSON.stringify(message) + " " + PROMPT.CODE_GEN_PROMPT;
         const response = await axios.post('/api/code', { prompt });
-        console.log(response.data);
+        console.log("response", response);
         const AIresponse = response.data;
 
         const AIfiles = { ...Lookup.DEFAULT_FILE, ...AIresponse?.files }
@@ -68,6 +79,23 @@ const CodeView = () => {
             workspaceId: id,
             files: AIresponse?.files
         });
+
+        // Use fallback for currentTokens if user.token is not a valid number.
+        const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
+        const tokensUsed = countTokens(AIresponse.response); // Updated here
+        const remainingTokens = currentTokens - tokensUsed;
+
+        console.log("Original token:", user.token);
+        console.log("Parsed token:", currentTokens);
+        console.log("Tokens used:", tokensUsed);
+        console.log("Remaining tokens:", remainingTokens);
+
+        // Update tokens in the database
+        await updateTokens({
+            token: remainingTokens,
+            _id: user._id
+        });
+
         setloading(false);
     }
 

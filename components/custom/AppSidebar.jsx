@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "../ui/button"
 import WorkspaceHistory from "./WorkspaceHistory"
+import Sidebarfooter from "./SidebarFooter"
 
 const AppSidebar = () => {
     return (
@@ -18,7 +19,9 @@ const AppSidebar = () => {
                 <SidebarGroup />
                 <SidebarGroup />
             </SidebarContent>
-            <SidebarFooter />
+            <SidebarFooter>
+                <Sidebarfooter />
+            </SidebarFooter>
         </Sidebar>
     )
 }

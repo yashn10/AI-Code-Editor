@@ -11,19 +11,25 @@ import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSidebar } from '../ui/sidebar'
 
+
 const ChatView = () => {
   const { id } = useParams();
   const convex = useConvex();
   const [text, setText] = useState('');
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
   const { message, setmessage } = useContext(MessagesContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const updateMessage = useMutation(api.workspace.updateWorkspace);
+  const updateTokens = useMutation(api.users.updateToken);
   const { toggleSidebar } = useSidebar();
 
   useEffect(() => {
-    getWorkspaceData();
-  }, [id]);
+    if (user) {
+      getWorkspaceData();
+      console.log("user", user);
+    }
+  }, [id, user]);
+
 
   const getWorkspaceData = async () => {
     const result = await convex.query(api.workspace.getWorkspace, { workspaceId: id });
@@ -38,6 +44,10 @@ const ChatView = () => {
     setmessage((prev) => [...prev, userMessage]);
     setText('');
   };
+
+  const countTokens = (text) => {
+    return text.trim().split(/\s+/).length;
+  }
 
   // Processes the last user message by fetching the bot's reply
   const processResponse = async () => {
@@ -55,11 +65,31 @@ const ChatView = () => {
         const botMessage = { role: 'bot', prompt: data.response };
         setmessage((prev) => [...prev, botMessage]);
         await updateMessage({ workspaceId: id, messages: [...message, botMessage] });
+
+        // Use fallback for currentTokens if user.token is not a valid number.
+        const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
+        const tokensUsed = countTokens(botMessage.prompt);
+        const remainingTokens = currentTokens - tokensUsed;
+
+        console.log("Original token:", user.token);
+        console.log("Parsed token:", currentTokens);
+        console.log("Tokens used:", tokensUsed);
+        console.log("Remaining tokens:", remainingTokens);
+
+        // Update tokens in the database
+        await updateTokens({
+          token: remainingTokens,
+          _id: user._id
+        });
+
+        setIsAwaitingResponse(false);
       } else {
         console.error("No response generated", data.error);
+        setIsAwaitingResponse(false);
       }
     } catch (error) {
       console.error("Error while generating response:", error);
+      setIsAwaitingResponse(false);
     } finally {
       setIsAwaitingResponse(false);
     }
