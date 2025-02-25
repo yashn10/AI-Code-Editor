@@ -35,7 +35,7 @@ const Provider = ({ children }) => {
                 console.log(result);
                 setUser(result);
             } else {
-                router.push("/Main");
+                router.push("/");
             }
         }
     }

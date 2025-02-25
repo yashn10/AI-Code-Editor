@@ -1,4 +1,4 @@
-import React, { act, useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { SandpackPreview, useSandpack } from "@codesandbox/sandpack-react";
 import ActionContext from '@/context/ActionContext';
 
@@ -23,7 +23,7 @@ const SandpackPreviewClient = () => {
             if (action?.action === "download") {
                 window.open(result.editorUrl);
             } else if (action?.action === "deploy") {
-                window.open('https://' + result?.sandboxId + '.csb.app/');
+                window.open(`https://${result?.sandboxId}.csb.app/`, '_blank', 'noopener');
             }
         }
     }
