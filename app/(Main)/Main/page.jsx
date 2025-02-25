@@ -18,6 +18,15 @@ const Main = () => {
   const Workspace = useMutation(api.workspace.addWorkspace);
   const router = useRouter();
 
+  // useEffect(() => {
+  //   if (!user && typeof window !== 'undefined') {
+  //     const storedUser = localStorage.getItem('user');
+  //     if (storedUser) {
+  //       setUser(JSON.parse(storedUser));
+  //     }
+  //   }
+  // }, [user, setUser]);
+
   useEffect(() => {
     if (!user && typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('user');
@@ -25,7 +34,8 @@ const Main = () => {
         setUser(JSON.parse(storedUser));
       }
     }
-  }, [user, setUser]);
+    // Only run on mount
+  }, []);
 
 
   const handleClick = async (prompt) => {

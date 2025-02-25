@@ -17,7 +17,8 @@ const Provider = ({ children }) => {
 
     const router = useRouter();
 
-    const [message, setmessage] = useState();
+    // const [message, setmessage] = useState();
+    const [message, setmessage] = useState({ messages: [] });
     const [user, setUser] = useState();
     const [action, setAction] = useState();
     const convex = useConvex();

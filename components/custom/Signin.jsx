@@ -15,11 +15,13 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import uuid4 from "uuid4";
 import { useRouter } from 'next/navigation';
+import { useConvex } from 'convex/react'
 
 
 const Signin = ({ openDialogue, closeDialogue }) => {
 
     const router = useRouter();
+    const convex = useConvex();
     const { user, setUser } = useContext(UserContext);
     const CreateUser = useMutation(api.users.CreateUser);
 
@@ -41,11 +43,13 @@ const Signin = ({ openDialogue, closeDialogue }) => {
                 image: data?.picture
             })
 
+            const fullUser = await convex.query(api.users.GetUser, { email: data?.email });
+
             if (typeof window !== 'undefined') {
                 localStorage.setItem('user', JSON.stringify(data));
             }
 
-            await setUser(data);
+            setUser(fullUser);
             closeDialogue(true);
             router.push('/Main');
         },
