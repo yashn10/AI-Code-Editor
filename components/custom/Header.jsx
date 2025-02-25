@@ -10,7 +10,7 @@ const Header = () => {
   return (
 
     <div className='flex items-center p-4' style={{ justifyContent: "space-around" }}>
-      <h1>Header</h1>
+      <Link href={'/'} className='cursor-pointer text-xl font-bold' style={{ color: "#af00af" }}>CodeCanvas AI</Link>
 
       <div className='flex gap-5'>
         <Link href={'/Home'} className='cursor-pointer'>Home</Link>

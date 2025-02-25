@@ -45,7 +45,7 @@ const Main = () => {
 
     <div className='flex flex-col text-center justify-center items-center w-full' style={{ height: '80vh' }}>
       <h1 className='font-bold text-3xl'>What do you want to build ?</h1>
-      <p className='text-xl mt-2'>Start editing to see some magic happen!</p>
+      <p className='text-xl mt-2'>Start typing like 'Create a blog app...'</p>
 
       <div className='flex items-center gap-2 mt-4 w-full h-40 max-w-xl border border-gray-300 rounded-md' style={{ backgroundColor: '#121212' }}>
         <textarea className='p-4 w-full h-full outline-none bg-transparent resize-none' placeholder='Type here...' onChange={(e) => { setText(e.target.value) }}></textarea>
