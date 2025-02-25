@@ -50,7 +50,7 @@ const WorkspaceHistory = () => {
                 ) : (
                     <div className='flex flex-col space-y-2 mt-2'>
                         {workspaceData &&
-                            workspaceData[0].messages.filter((msg) => msg.role === 'user').map((msg, index) => (
+                            workspaceData[0].messages?.filter((msg) => msg.role === 'user').map((msg, index) => (
                                 <div key={index}>
                                     <Link href={`/workspace/${workspaceData[0]._id}`} onClick={toggleSidebar} className='bg-gray-800 block p-2 rounded-sm text-sm text-gray-400 font-light hover:text-white cursor-pointer'>
                                         {msg.prompt}
