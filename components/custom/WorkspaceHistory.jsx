@@ -42,22 +42,32 @@ const WorkspaceHistory = () => {
             </h2>
 
             <div className='h-[60vh]' style={{ overflowY: "scroll", scrollbarWidth: "none" }}>
-                {loading === true ? (
+                {loading ? (
                     <div className='p-5'>
                         <Loader2Icon className='animate-spin mx-auto' />
                         <h2 className='text-gray-500 text-center'>Loading Chats History</h2>
                     </div>
                 ) : (
                     <div className='flex flex-col space-y-2 mt-2'>
-                        {workspaceData &&
-                            workspaceData[0].messages?.filter((msg) => msg.role === 'user').map((msg, index) => (
-                                <div key={index}>
-                                    <Link href={`/workspace/${workspaceData[0]._id}`} onClick={toggleSidebar} className='bg-gray-800 block p-2 rounded-sm text-sm text-gray-400 font-light hover:text-white cursor-pointer'>
-                                        {msg.prompt}
-                                    </Link>
-                                </div>
-                            ))
-                        }
+                        {workspaceData && workspaceData.length > 0 ? (
+                            workspaceData.map((workspace) =>
+                                workspace.messages?.filter((msg) => msg.role === 'user').map((msg, index) => (
+                                    <div key={workspace._id + "-" + index}>
+                                        <Link
+                                            href={`/workspace/${workspace._id}`}
+                                            onClick={toggleSidebar}
+                                            className='bg-gray-800 block p-2 rounded-sm text-sm text-gray-400 font-light hover:text-white cursor-pointer'
+                                        >
+                                            {msg.prompt}
+                                        </Link>
+                                    </div>
+                                ))
+                            )
+                        ) : (
+                            <div className='text-center text-gray-400 py-10'>
+                                No chat history found.
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
