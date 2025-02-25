@@ -14,15 +14,16 @@ import { Button } from "../ui/button";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import uuid4 from "uuid4";
-// import CreateUser from "@/convex/users";
+import { useRouter } from 'next/navigation';
 
 
 const Signin = ({ openDialogue, closeDialogue }) => {
 
+    const router = useRouter();
     const { user, setUser } = useContext(UserContext);
     const CreateUser = useMutation(api.users.CreateUser);
 
-    
+
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             console.log(tokenResponse);
@@ -44,8 +45,9 @@ const Signin = ({ openDialogue, closeDialogue }) => {
                 localStorage.setItem('user', JSON.stringify(data));
             }
 
-            setUser(userInfo?.data);
+            await setUser(data);
             closeDialogue(true);
+            router.push('/Main');
         },
         onError: errorResponse => console.log(errorResponse),
     });

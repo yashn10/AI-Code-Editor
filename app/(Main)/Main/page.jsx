@@ -3,7 +3,7 @@
 import MessagesContext from '@/context/MessagesContext';
 import UserContext from '@/context/UserContext';
 import { ArrowRight } from 'lucide-react'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Signin from '../../../components/custom/Signin';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -18,12 +18,22 @@ const Main = () => {
   const Workspace = useMutation(api.workspace.addWorkspace);
   const router = useRouter();
 
-  const handleClick = async (prompt) => {
-    if (!user?.name) {
-      setOpenDialogue(true);
-    } else {
-      setOpenDialogue(false);
+  useEffect(() => {
+    if (!user && typeof window !== 'undefined') {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
     }
+  }, [user, setUser]);
+
+
+  const handleClick = async (prompt) => {
+    if (!user || !user._id) {
+      setOpenDialogue(true);
+      return;
+    }
+
     setmessage({
       role: 'user',
       prompt: prompt
