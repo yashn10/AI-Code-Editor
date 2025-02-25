@@ -44,18 +44,33 @@ const Main = () => {
       return;
     }
 
-    setmessage({
-      role: 'user',
-      prompt: prompt
+    // Create the new message object
+    const newMessage = { role: 'user', prompt };
+
+    // Construct the new messages array
+    const newMessages = [...message, newMessage];
+
+    // Update the state with the full array
+    setmessage(newMessages);
+
+    // setmessage({
+    //   role: 'user',
+    //   prompt: prompt
+    // });
+
+    // Pass the complete messages array to your mutation
+    const workspaceId = await Workspace({
+      user: user._id,
+      messages: newMessages,
     });
 
-    const workspaceId = await Workspace({
-      user: user?._id,
-      messages: [{
-        role: 'user',
-        prompt: prompt
-      }]
-    });
+    // const workspaceId = await Workspace({
+    //   user: user?._id,
+    //   messages: [{
+    //     role: 'user',
+    //     prompt: prompt
+    //   }]
+    // });
 
     console.log(workspaceId);
     router.push(`/workspace/${workspaceId}`);
