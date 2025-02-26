@@ -3,6 +3,8 @@
 import { chatCodeSession } from '@/config/AImodel';
 import { NextResponse } from 'next/server';
 
+export const maxDuration = 60; // Set maxDuration to 60 seconds for this route
+
 export async function POST(request) {
     const { prompt } = await request.json();
 
