@@ -37,7 +37,7 @@ const SidebarFooter = () => {
         <div className='mb-2'>
             {options.map((option, index) => {
                 return (
-                    <Button key={index} variant="ghost" className="w-full justify-start" onClick={() => routetoPricing(option)}>
+                    <Button key={index} variant="ghost" className="w-full justify-start" onClick={option.name === 'Subscription' ? () => routetoPricing(option) : undefined}>
                         <option.icon className="mr-2 h-4 w-4" />
                         <span>{option.name}</span>
                     </Button>
