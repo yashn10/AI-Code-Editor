@@ -5,9 +5,8 @@ import UserContext from '@/context/UserContext'
 import { api } from '@/convex/_generated/api'
 import { useConvex, useMutation } from 'convex/react'
 import Image from 'next/image'
-import { ArrowRight, Loader2Icon } from 'lucide-react'
+import { ArrowRight, Loader2Icon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
 import { useParams } from 'next/navigation'
-// import ReactMarkdown from 'react-markdown'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSidebar } from '../ui/sidebar'
 
@@ -21,6 +20,7 @@ const ChatView = () => {
   const { user, setUser } = useContext(UserContext);
   const updateMessage = useMutation(api.workspace.updateWorkspace);
   const updateTokens = useMutation(api.users.updateToken);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toggleSidebar } = useSidebar();
 
   useEffect(() => {
@@ -108,11 +108,18 @@ const ChatView = () => {
   }, [message, isAwaitingResponse]);
 
 
+  const handleSidebarClick = () => {
+    setSidebarOpen(!sidebarOpen);
+    toggleSidebar();
+  };
+
+
   return (
 
     <div className="mx-auto max-w-4xl p-2">
       <div className='flex items-center p-2'>
-        {user && <Image src={user?.image} alt="user" width={40} height={40} className='rounded-full cursor-pointer' onClick={toggleSidebar} />}
+        {sidebarOpen ? <SidebarCloseIcon className='cursor-pointer' onClick={handleSidebarClick} /> : <SidebarOpenIcon className='cursor-pointer' onClick={handleSidebarClick} />}
+        {/* {user && <Image src={user?.image} alt="user" width={40} height={40} className='rounded-full cursor-pointer' onClick={toggleSidebar} />} */}
         <h2 className="mb-2 text-center w-full">Your Chats</h2>
       </div>
 

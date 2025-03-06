@@ -6,7 +6,8 @@ import {
     SandpackLayout,
     SandpackCodeEditor,
     SandpackFileExplorer,
-    ExportIcon
+    ExportIcon,
+    SandpackConsole
 } from "@codesandbox/sandpack-react";
 import Lookup from '@/data/Lookup';
 import PROMPT from '@/data/Prompt';
@@ -20,6 +21,7 @@ import UserContext from '@/context/UserContext';
 import { Button } from '../ui/button';
 import SandpackPreviewClient from './SandpackPreview';
 import ActionContext from '@/context/ActionContext';
+import { amethyst } from '@codesandbox/sandpack-themes';
 
 const CodeView = () => {
 
@@ -39,7 +41,7 @@ const CodeView = () => {
     }, [id])
 
     useEffect(() => {
-        setactiveTab('preview');
+        setactiveTab('code');
     }, [action])
 
 
@@ -88,12 +90,26 @@ const CodeView = () => {
         console.log("response", response);
         const AIresponse = response.data;
 
-        const AIfiles = { ...Lookup.DEFAULT_FILE, ...AIresponse?.files }
+        // const AIfiles = { ...Lookup.DEFAULT_FILE, ...AIresponse?.files }
+        // setfiles(AIfiles);
+
+        // await updateFiles({
+        //     workspaceId: id,
+        //     files: AIresponse?.files
+        // });
+
+        // Combine frontend and backend files
+        const combinedFiles = {
+            ...AIresponse?.frontend?.files,
+            ...AIresponse?.backend?.files,
+        };
+
+        const AIfiles = { ...Lookup.DEFAULT_FILE, ...combinedFiles }
         setfiles(AIfiles);
 
         await updateFiles({
             workspaceId: id,
-            files: AIresponse?.files
+            files: combinedFiles // <--- Pass the combined files here
         });
 
         // Use fallback for currentTokens if user.token is not a valid number.
@@ -115,6 +131,7 @@ const CodeView = () => {
         setloading(false);
     }
 
+
     return (
 
         <div className='px-4'>
@@ -127,28 +144,46 @@ const CodeView = () => {
 
                 <div className='flex gap-2'>
                     <Button variant="outline" className="bg-orange-500" onClick={() => handleAction("download")}><ExportIcon /> Download</Button>
-                    <Button variant="outline" className="bg-green-500" onClick={() => handleAction("deploy")}><Rocket /> Deploy</Button>
+                    <Button variant="outline" className="bg-green-500" onClick={() => handleAction("deploy")}><Rocket /> Get URL</Button>
                 </div>
             </div>
 
             <div className='relative'>
-                <SandpackProvider template="react" theme={"dark"} files={files} customSetup={{
+                <SandpackProvider template="react" theme={amethyst} root="/frontend" files={files} customSetup={{
                     dependencies: {
-                        ...Lookup.DEPENDANCY
-                    }
+                        ...Lookup.DEPENDANCY.frontend
+                    },
+                    entry: "frontend/src/index.js",
                 }}
                     options={{
-                        externalResources: ['https://cdn.tailwindcss.com']
+                        externalResources: ['https://cdn.tailwindcss.com'],
+                        autorun: true,
+                        autoReload: true,
+                        resizablePanels: true
                     }}
                 >
                     <SandpackLayout>
                         {activeTab === 'code' ?
                             <>
-                                <SandpackFileExplorer style={{ height: "80vh" }} />
-                                <SandpackCodeEditor style={{ height: "80vh" }} />
+                                <SandpackFileExplorer style={{ height: "78vh" }} />
+                                <SandpackCodeEditor
+                                    showLineNumbers
+                                    showTabs
+                                    showRunButton
+                                    showInlineErrors
+                                    wrapContent
+                                    closableTabs
+                                    style={{ height: "78vh" }} />
                             </> :
                             <>
-                                <SandpackPreviewClient />
+                                <div className="flex flex-col" style={{ height: "78vh", width: "100%" }}>
+                                    <SandpackPreviewClient style={{ height: "78vh" }} options={{
+                                        showNavigator: true,
+                                        showConsole: true,
+                                        showConsoleButton: true,
+                                    }} />
+                                    <SandpackConsole style={{ height: "20vh" }} />
+                                </div>
                             </>
                         }
                     </SandpackLayout>
