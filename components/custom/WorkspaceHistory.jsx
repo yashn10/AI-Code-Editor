@@ -25,6 +25,7 @@ const WorkspaceHistory = () => {
         setloading(true);
         if (!user || !user._id) {
             console.warn("User not loaded yet");
+            setloading(false);
             return;
         }
         const workspaces = await convex.query(api.workspace.getAllWorkspaceData, { _id: user._id });
@@ -65,7 +66,7 @@ const WorkspaceHistory = () => {
                             )
                         ) : (
                             <div className='text-center text-gray-400 py-10'>
-                                No chat history found.
+                                No chat history found, please signin and start a new conversation.
                             </div>
                         )}
                     </div>

@@ -11,15 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Signin from './Signin';
-import { useRouter } from 'next/navigation';
+import Logout from './Logout';
 
 
 const Header = () => {
 
-  const router = useRouter();
   const { setTheme } = useTheme()
   const { user, setUser } = useContext(UserContext);
   const [openDialogue, setOpenDialogue] = useState(false);
+  const [openoutDialogue, setOpenoutDialogue] = useState(false);
 
 
   const handleClick = () => {
@@ -31,9 +31,11 @@ const Header = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push('/');
+    if (user) {
+      setOpenoutDialogue(true);
+    } else {
+      setOpenoutDialogue(false);
+    }
   };
 
   return (
@@ -55,10 +57,10 @@ const Header = () => {
         </Link>
         {user ? (
           // If a user is logged in, show Logout button
-          <Button variant="secondary" onClick={handleLogout}>Logout</Button>
+          <Button variant="outline" onClick={handleLogout}>Logout</Button>
         ) : (
           // If no user, show Sign In button
-          <Button variant="secondary" onClick={handleClick}>Sign In</Button>
+          <Button variant="outline" onClick={handleClick}>Sign In</Button>
         )}
 
         <DropdownMenu>
@@ -84,6 +86,7 @@ const Header = () => {
       </div>
 
       <Signin openDialogue={openDialogue} closeDialogue={() => setOpenDialogue(false)} />
+      <Logout openoutDialogue={openoutDialogue} closeDialogue={() => setOpenoutDialogue(false)} />
 
     </div>
 
