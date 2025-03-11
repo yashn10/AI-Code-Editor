@@ -1,3 +1,4 @@
+// data/Prompt.jsx
 import dedent from "dedent";
 
 export default {

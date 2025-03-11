@@ -13,6 +13,7 @@ const SandpackPreviewClient = () => {
         getSandpackClient();
     }, [sandpack && action])
 
+
     const getSandpackClient = async () => {
         const client = await previewRef.current?.getClient();
 
@@ -27,6 +28,7 @@ const SandpackPreviewClient = () => {
             }
         }
     }
+
 
     return (
         <SandpackPreview ref={previewRef} style={{ height: "80vh" }} showNavigator={true} />

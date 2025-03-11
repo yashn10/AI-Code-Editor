@@ -33,7 +33,7 @@ const Provider = ({ children }) => {
             const user = JSON.parse(localStorage.getItem('user'));
             if (user) {
                 const result = await convex.query(api.users.GetUser, { email: user.email });
-                console.log(result);
+                // console.log(result);
                 setUser(result);
             } else {
                 router.push("/");

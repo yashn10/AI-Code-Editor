@@ -24,13 +24,13 @@ const WorkspaceHistory = () => {
     const getAllWorkspaces = async () => {
         setloading(true);
         if (!user || !user._id) {
-            console.warn("User not loaded yet");
+            // console.warn("User not loaded yet");
             setloading(false);
             return;
         }
         const workspaces = await convex.query(api.workspace.getAllWorkspaceData, { _id: user._id });
         setworkspaceData(workspaces);
-        console.log("data", workspaces);
+        // console.log("data", workspaces);
         setloading(false);
     };
 
@@ -38,7 +38,7 @@ const WorkspaceHistory = () => {
     return (
 
         <div className='py-2'>
-            <h2 className='p-2'>
+            <h2 className='p-2 font-semibold text-center text-gray-500'>
                 Your Chat History
             </h2>
 
@@ -57,7 +57,7 @@ const WorkspaceHistory = () => {
                                         <Link
                                             href={`/workspace/${workspace._id}`}
                                             onClick={toggleSidebar}
-                                            className='bg-gray-800 block p-2 rounded-sm text-sm text-gray-400 font-light hover:text-white cursor-pointer'
+                                            className='bg-gray-900 block p-2 rounded-sm text-sm text-gray-400 font-light hover:text-white cursor-pointer'
                                         >
                                             {msg.prompt}
                                         </Link>

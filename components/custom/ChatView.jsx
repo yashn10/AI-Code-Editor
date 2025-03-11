@@ -26,7 +26,7 @@ const ChatView = () => {
   useEffect(() => {
     if (user) {
       getWorkspaceData();
-      console.log("user", user);
+      // console.log("user", user);
     }
   }, [id, user]);
 
@@ -34,7 +34,7 @@ const ChatView = () => {
   const getWorkspaceData = async () => {
     const result = await convex.query(api.workspace.getWorkspace, { workspaceId: id });
     setmessage(result?.messages || []);
-    console.log(result);
+    // console.log(result);
   };
 
   // Sends the user's message and clears the input
@@ -70,11 +70,6 @@ const ChatView = () => {
         const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
         const tokensUsed = countTokens(botMessage.prompt);
         const remainingTokens = currentTokens - tokensUsed;
-
-        console.log("Original token:", user.token);
-        console.log("Parsed token:", currentTokens);
-        console.log("Tokens used:", tokensUsed);
-        console.log("Remaining tokens:", remainingTokens);
 
         // Update tokens in the database
         await updateTokens({
@@ -124,10 +119,10 @@ const ChatView = () => {
       </div>
 
       {/* Conversation Area */}
-      <div className="bg-gray-800 rounded-lg shadow p-4 mb-6 h-[60vh] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+      <div className="bg-gray-900 rounded-lg shadow p-4 mb-6 h-[60vh] overflow-y-auto" style={{ scrollbarWidth: 'none', fontSize: 'medium' }}>
         {message && message.length > 0 ? (
           message.map((msg, index) => (
-            <div key={index} className="flex gap-4 items-center bg-gray-900 rounded-lg p-3 mb-2">
+            <div key={index} className="flex flex-col gap-4 items-center bg-gray-950 rounded-lg p-3 mb-2">
               {msg?.role === 'user' && (
                 <Image
                   src={user?.image || '/default-profile.png'}
@@ -144,7 +139,7 @@ const ChatView = () => {
 
               {/* Loader */}
               {isAwaitingResponse && (
-                <div className="bg-gray-800 flex items-center gap-3 p-3 rounded-lg shadow mb-2">
+                <div className="bg-gray-950 flex items-center gap-3 p-3 rounded-lg shadow mb-2">
                   <Loader2Icon className="animate-spin text-white" />
                   <p className="text-gray-200">Generating response, please wait...</p>
                 </div>
@@ -161,10 +156,10 @@ const ChatView = () => {
 
 
       {/* Input Area */}
-      <div className="flex items-center gap-3 mt-4 w-full max-w-xl mx-auto p-4 bg-gray-800 border border-blue-800 rounded-lg shadow">
+      <div className="flex items-center gap-3 mt-4 w-full max-w-xl mx-auto p-4 bg-gray-900 border border-blue-800 rounded-lg shadow">
         <textarea
-          className="p-4 w-full h-24 outline-none bg-transparent resize-none text-gray-100 placeholder-gray-400"
-          placeholder="Type here..."
+          className="w-full h-14 outline-none bg-transparent resize-none text-gray-100 placeholder-gray-400"
+          placeholder="Type your changes here..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         ></textarea>

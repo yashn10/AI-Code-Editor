@@ -9,8 +9,12 @@ import {
     ExportIcon,
     SandpackConsole
 } from "@codesandbox/sandpack-react";
-import Lookup from '@/data/Lookup';
-import PROMPT from '@/data/Prompt';
+import LookupReactNext from '@/data/Lookup';
+import PROMPTReactNext from '@/data/Prompt';
+// import LookupAngular from '@/data/Angular/Lookup'; // Angular Lookup
+// import PROMPTAngular from '@/data/Angular/Prompt'; // Angular Prompt
+import LookupHTMLCSSJS from '@/data/HTML-CSS-JS/Lookup'; // HTML CSS JS Lookup
+import PROMPTHTMLCSSJS from '@/data/HTML-CSS-JS/Prompt'; // HTML CSS JS Prompt
 import MessagesContext from '@/context/MessagesContext';
 import axios from 'axios';
 import { useConvex, useMutation } from 'convex/react';
@@ -28,13 +32,20 @@ const CodeView = () => {
     const { id } = useParams();
     const { user, setUser } = useContext(UserContext);
     const [activeTab, setactiveTab] = useState('code');
-    const [files, setfiles] = useState(Lookup.DEFAULT_FILE);
+    const [files, setfiles] = useState();
     const { message, setmessage } = useContext(MessagesContext);
     const updateFiles = useMutation(api.workspace.updateFiles);
     const { action, setAction } = useContext(ActionContext);
     const [loading, setloading] = useState(false);
     const convex = useConvex();
     const updateTokens = useMutation(api.users.updateToken);
+    const [currentLookup, setCurrentLookup] = useState(); // State for dynamic Lookup
+    const [currentPrompt, setCurrentPrompt] = useState(); // State for dynamic Prompt
+    const [sandpackTemplate, setSandpackTemplate] = useState("static"); // State for Sandpack template
+    const [sandpackEntry, setSandpackEntry] = useState("");
+    const [sandpackRoot, setSandpackRoot] = useState("/");
+    // const [sandpackEntry, setSandpackEntry] = useState("frontend/src/main.ts"); // State for Angular Sandpack entry point
+    const [sandpackDependencies, setSandpackDependencies] = useState(LookupHTMLCSSJS.DEPENDANCY.frontend); // State for Sandpack dependencies
 
     useEffect(() => {
         fetchFiles();
@@ -45,11 +56,35 @@ const CodeView = () => {
     }, [action])
 
 
+    useEffect(() => {
+        setFramework();
+    }, [])
+
+
     const handleAction = (text) => {
         setAction({
             action: text,
             timestamp: Date.now()
         })
+    }
+
+
+    const setFramework = async () => {
+        const result = await convex.query(api.workspace.getWorkspace, {
+            workspaceId: id,
+        })
+
+        if (result.messages[0].framework === "reactjs") {
+            setSandpackEntry("frontend/src/index.js");
+            setSandpackRoot("/frontend");
+            setSandpackTemplate("react");
+            setSandpackDependencies(LookupReactNext.DEPENDANCY.frontend);
+        } else {
+            setSandpackEntry("index.html");
+            setSandpackRoot("/");
+            setSandpackTemplate("static");
+            setSandpackDependencies(LookupHTMLCSSJS.DEPENDANCY.frontend);
+        }
     }
 
 
@@ -59,7 +94,7 @@ const CodeView = () => {
             workspaceId: id,
         })
 
-        const allFiles = { ...Lookup.DEFAULT_FILE, ...result?.Data };
+        const allFiles = { ...currentLookup, ...result?.Data };
         setfiles(allFiles);
         setloading(false);
     }
@@ -67,12 +102,42 @@ const CodeView = () => {
 
     useEffect(() => {
         if (message?.length > 0) {
-            const role = message[message?.length - 1].role;
-            if (role === 'user') {
-                generateCode();
+            const lastMessage = message[message.length - 1];
+            if (lastMessage.role === "user") {
+                // Show spinner immediately
+                setloading(true);
+                setactiveTab('code');
+
+                if (message[0].framework === "reactjs") {
+                    setCurrentLookup(LookupReactNext.DEFAULT_FILE);
+                    setCurrentPrompt(PROMPTReactNext.CODE_GEN_PROMPT);
+                    setSandpackTemplate("react");
+                    setSandpackEntry("frontend/src/index.js");
+                    setSandpackDependencies(LookupReactNext.DEPENDANCY.frontend);
+                } else {
+                    setCurrentLookup(LookupHTMLCSSJS.DEFAULT_FILE);
+                    setCurrentPrompt(PROMPTHTMLCSSJS.CODE_GEN_PROMPT);
+                    setSandpackTemplate("static");
+                    setSandpackEntry("index.html");
+                    setSandpackDependencies(LookupHTMLCSSJS.DEPENDANCY.frontend);
+                }
             }
         }
-    }, [message])
+    }, [message]);
+
+
+    // 2. Once all relevant states are set (including loading), call generateCode().
+    useEffect(() => {
+        if (
+            sandpackEntry &&
+            sandpackTemplate &&
+            sandpackDependencies &&
+            currentPrompt &&
+            loading
+        ) {
+            generateCode();
+        }
+    }, [sandpackEntry, sandpackTemplate, sandpackDependencies, currentPrompt, loading]);
 
 
     const countTokens = (text) => {
@@ -85,51 +150,38 @@ const CodeView = () => {
 
     const generateCode = async () => {
         setloading(true);
-        const prompt = JSON.stringify(message) + " " + PROMPT.CODE_GEN_PROMPT;
-        const response = await axios.post('/api/code', { prompt });
-        console.log("response", response);
-        const AIresponse = response.data;
+        try {
+            console.log("message", message);
+            const prompt = JSON.stringify(message) + " " + currentPrompt;
+            const response = await axios.post('/api/code', { prompt });
+            const AIresponse = response.data;
 
-        // const AIfiles = { ...Lookup.DEFAULT_FILE, ...AIresponse?.files }
-        // setfiles(AIfiles);
+            const combinedFiles = {
+                ...AIresponse?.frontend?.files,
+                ...AIresponse?.backend?.files,
+            };
 
-        // await updateFiles({
-        //     workspaceId: id,
-        //     files: AIresponse?.files
-        // });
+            // console.log(combinedFiles);
 
-        // Combine frontend and backend files
-        const combinedFiles = {
-            ...AIresponse?.frontend?.files,
-            ...AIresponse?.backend?.files,
-        };
+            // Merge with the current files to retain previous code
+            setfiles(prevFiles => {
+                const mergedFiles = { ...prevFiles, ...combinedFiles };
+                return mergedFiles;
+            });
 
-        const AIfiles = { ...Lookup.DEFAULT_FILE, ...combinedFiles }
-        setfiles(AIfiles);
+            await updateFiles({ workspaceId: id, files: combinedFiles });
 
-        await updateFiles({
-            workspaceId: id,
-            files: combinedFiles // <--- Pass the combined files here
-        });
+            const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
+            const tokensUsed = countTokens(AIresponse.response);
+            const remainingTokens = currentTokens - tokensUsed;
 
-        // Use fallback for currentTokens if user.token is not a valid number.
-        const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
-        const tokensUsed = countTokens(AIresponse.response); // Updated here
-        const remainingTokens = currentTokens - tokensUsed;
-
-        console.log("Original token:", user.token);
-        console.log("Parsed token:", currentTokens);
-        console.log("Tokens used:", tokensUsed);
-        console.log("Remaining tokens:", remainingTokens);
-
-        // Update tokens in the database
-        await updateTokens({
-            token: remainingTokens,
-            _id: user._id
-        });
-
-        setloading(false);
-    }
+            await updateTokens({ token: remainingTokens, _id: user._id });
+        } catch (error) {
+            console.error("Error in generateCode:", error);
+        } finally {
+            setloading(false);
+        }
+    };
 
 
     return (
@@ -149,11 +201,9 @@ const CodeView = () => {
             </div>
 
             <div className='relative'>
-                <SandpackProvider template="react" theme={amethyst} root="/frontend" files={files} customSetup={{
-                    dependencies: {
-                        ...Lookup.DEPENDANCY.frontend
-                    },
-                    entry: "frontend/src/index.js",
+                <SandpackProvider template={sandpackTemplate} theme={amethyst} root={sandpackRoot} files={files} customSetup={{
+                    dependencies: sandpackDependencies,
+                    entry: sandpackEntry,
                 }}
                     options={{
                         externalResources: ['https://cdn.tailwindcss.com'],
@@ -179,10 +229,10 @@ const CodeView = () => {
                                 <div className="flex flex-col" style={{ height: "78vh", width: "100%" }}>
                                     <SandpackPreviewClient style={{ height: "78vh" }} options={{
                                         showNavigator: true,
-                                        showConsole: true,
-                                        showConsoleButton: true,
+                                        // showConsole: true,
+                                        // showConsoleButton: true,
                                     }} />
-                                    <SandpackConsole style={{ height: "20vh" }} />
+                                    {/* <SandpackConsole style={{ height: "20vh" }} /> */}
                                 </div>
                             </>
                         }

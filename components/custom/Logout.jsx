@@ -9,10 +9,13 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
+import { useContext } from "react";
+import UserContext from "@/context/UserContext";
 
 const Logout = ({ openoutDialogue, closeDialogue }) => {
 
     const router = useRouter();
+    const { user, setUser } = useContext(UserContext);
 
     const handleSignout = () => {
         localStorage.removeItem("user");

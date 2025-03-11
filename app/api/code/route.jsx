@@ -12,23 +12,10 @@ export async function POST(request) {
         const result = await chatCodeSession.sendMessage(prompt);
         const generatedText = result.response.text();
 
-
-        // const safeText = generatedText
-        //     .replace(/\\(?!["\\\/bfnrtu])/g, '\\\\')
-        //     .replace(/\\x/g, '\\\\x');
-
-        // return NextResponse.json(JSON.parse(safeText));
-
-
-
-        // Sanitize generatedText by escaping problematic characters.
-        // This regex escapes any backslash not followed by a valid escape sequence,
-        // and then explicitly escapes \x sequences.
         const safeText = generatedText
             .replace(/\\(?!["\\\/bfnrtu])/g, '\\\\')
             .replace(/\\x/g, '\\\\x');
 
-        // Attempt to parse the safe text. If it fails, catch the parsing error.
         let parsedData;
         try {
             parsedData = JSON.parse(safeText);

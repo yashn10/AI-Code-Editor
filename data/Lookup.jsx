@@ -1,61 +1,98 @@
+// data/Lookup.jsx
+
 import dedent from "dedent";
 
 export default {
-  SUGGSTIONS: ['Create ToDo App in React', 'Create Budget Track App', 'Create Gym Managment Portal Dashboard', 'Create Quizz App On History', 'Create Login Signup Screen'],
-  HERO_HEADING: 'What do you want to build?',
-  HERO_DESC: 'Prompt, run, edit, and deploy full-stack web apps.',
-  INPUT_PLACEHOLDER: 'What you want to build?',
-  SIGNIN_HEADING: 'Continue With Bolt.New 2.0',
-  SIGNIN_SUBHEADING: 'To use Bolt you must log into an existing account or create one.',
-  SIGNIn_AGREEMENT_TEXT: 'By using Bolt, you agree to the collection of usage data for analytics.',
-
+  SUGGSTIONS: [
+    "Create ToDo App in React",
+    "Create Budget Track App",
+    "Create Gym Managment Portal Dashboard",
+    "Create Quizz App On History",
+    "Create Login Signup Screen"
+  ],
+  HERO_HEADING: "What do you want to build?",
+  HERO_DESC: "Prompt, run, edit, and deploy full-stack web apps.",
+  INPUT_PLACEHOLDER: "What you want to build?",
+  SIGNIN_HEADING: "Continue With Bolt.New 2.0",
+  SIGNIN_SUBHEADING: "To use Bolt you must log into an existing account or create one.",
+  SIGNIn_AGREEMENT_TEXT: "By using Bolt, you agree to the collection of usage data for analytics.",
 
   DEFAULT_FILE: {
-    '/frontend/public/index.html': {
+    "frontend/public/index.html": {
       code: `<!DOCTYPE html>
 <html lang="en">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>React App</title>
   <script src="https://cdn.tailwindcss.com"></script>
- </head>
- <body>
+</head>
+<body>
   <div id="root"></div>
- </body>
+</body>
 </html>`
     },
-    '/frontend/src/App.css': {
+    "frontend/src/index.css": {
       code: `
-      @tailwind base;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
 @tailwind components;
-@tailwind utilities;`
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+`
     },
-    '/frontend/tailwind.config.js': {
-      code: `
-      /** @type {import('tailwindcss').Config} */
-module.exports = {
- content: [
-  "./src/**/*.{js,jsx,ts,tsx}",
- ],
- theme: {
-  extend: {},
- },
- plugins: [],
+    // A default React entry file. If Next.js is chosen, ignore/overwrite this.
+    "frontend/src/index.js": {
+      code: `import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);`
+    },
+    // A minimal React App component. Again, skip if Next.js is chosen.
+    "frontend/src/App.js": {
+      code: `import React from "react";
+
+export default function App() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold text-blue-600">Hello React + Tailwind!</h1>
+      <p className="text-gray-700 mt-2">This is a default setup for Bolt.New.</p>
+    </div>
+  );
 }`
     },
-    '/frontend/postcss.config.js': {
+    "frontend/tailwind.config.js": {
+      code: dedent`
+      /** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}`
+    },
+    "frontend/postcss.config.js": {
       code: `/** @type {import('postcss-load-config').Config} */
 const config = {
- plugins: {
-  tailwindcss: {},
- },
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {}
+  }
 };
 
 export default config;
 `
     },
-    '/backend/package.json': {
+    "backend/package.json": {
       code: `{
   "name": "backend",
   "version": "1.0.0",
@@ -77,7 +114,7 @@ export default config;
   }
 }`
     },
-    '/backend/index.js': {
+    "backend/index.js": {
       code: `import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
@@ -112,12 +149,10 @@ async function run() {
     });
 
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close(); // Keep connection open for API to work
+    // Keep connection open for API to work
   }
 }
 run().catch(console.dir);
-
 
 app.get('/', (req, res) => {
   res.send('Hello FullStack App from Bolt.New!');
@@ -128,7 +163,7 @@ app.listen(port, () => {
 });
 `
     },
-    '/.gitignore': {
+    ".gitignore": {
       code: `node_modules
 /frontend/node_modules
 /backend/node_modules
@@ -136,6 +171,7 @@ app.listen(port, () => {
 `
     }
   },
+
   DEPENDANCY: {
     "frontend": {
       "postcss": "^8",
@@ -146,13 +182,17 @@ app.listen(port, () => {
       "tailwindcss-animate": "^1.0.7",
       "lucide-react": "^0.469.0",
       "react-router-dom": "^7.1.1",
-      "firebase": "^11.1.0",
+      // "firebase": "^11.1.0",
       "@google/generative-ai": "^0.21.0",
       "date-fns": "^4.1.0",
       "react-chartjs-2": "^5.3.0",
       "chart.js": "^4.4.7",
+      "axios": "^1.4.0",
+      "framer-motion": "^11.0.0",
+      "react-icons": "^5.0.1",
+      "react-toastify": "^9.1.3",
     },
-    "backend": {
+    backend: {
       "cors": "^2.8.5",
       "express": "^4.19.2",
       "mongodb": "^7.1.0",
@@ -160,37 +200,36 @@ app.listen(port, () => {
       "mongoose": "^8.2.0"
     }
   },
-  PRICING_DESC: 'Start with a free account to speed up your workflow on public projects or boost your entire team with instantly-opening production environments.',
+
+  PRICING_DESC: "Start with a free account to speed up your workflow on public projects or boost your entire team with instantly-opening production environments.",
   PRICING_OPTIONS: [
     {
-      name: 'Basic',
-      tokens: '50K',
+      name: "Basic",
+      tokens: "50K",
       value: 50000,
-      desc: 'Ideal for hobbyists and casual users for light, exploratory use.',
+      desc: "Ideal for hobbyists and casual users for light, exploratory use.",
       price: 4.99
     },
     {
-      name: 'Starter',
-      tokens: '120K',
+      name: "Starter",
+      tokens: "120K",
       value: 120000,
-      desc: 'Designed for professionals who need to use Bolt a few times per week.',
+      desc: "Designed for professionals who need to use Bolt a few times per week.",
       price: 9.99
     },
     {
-      name: 'Pro',
-      tokens: '2.5M',
+      name: "Pro",
+      tokens: "2.5M",
       value: 2500000,
-      desc: 'Designed for professionals who need to use Bolt a few times per week.',
+      desc: "Designed for professionals who need to use Bolt a few times per week.",
       price: 19.99
     },
     {
-      name: 'Unlimted (License)',
-      tokens: 'Unmited',
+      name: "Unlimted (License)",
+      tokens: "Unmited",
       value: 999999999,
-      desc: 'Designed for professionals who need to use Bolt a few times per week.',
+      desc: "Designed for professionals who need to use Bolt a few times per week.",
       price: 49.99
     }
   ]
-
-
-}
+};
