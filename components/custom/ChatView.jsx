@@ -59,7 +59,7 @@ const ChatView = () => {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: lastUserMessage.prompt })
+        body: JSON.stringify({ prompt: lastUserMessage.prompt, framework: message[0].framework }),
       });
       const data = await res.json();
       if (data.response) {

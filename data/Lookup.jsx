@@ -191,6 +191,7 @@ app.listen(port, () => {
       "framer-motion": "^11.0.0",
       "react-icons": "^5.0.1",
       "react-toastify": "^9.1.3",
+      "aos": "^2.3.4"
     },
     backend: {
       "cors": "^2.8.5",

@@ -10,12 +10,25 @@ export async function POST(request) {
     const prompt = await request.json();
 
     try {
-        const enhancedPrompt = `Analyze the following prompt: "${prompt}". This prompt is a user's request for building a project so your task is to transform the given prompt while keeping the user's intent and context intact into a detailed, long, and highly-optimized query that focuses primarily on creating an exceptional award winning UI design using CSS and TailwindCSS. Emphasize modern, responsive layouts, smooth animations, and interactive elements achieved with minimal reliance on external libraries. Extract all essential details from the user's input, and craft a final query that is both concise and comprehensive. Output only the final enhanced query without any additional commentary or descriptions. Refer to the below example for better understanding,
-        
-        User Prompt: create a portfolio website,
+        const enhancedPrompt = `
+Analyze the user's request: ${prompt}.
 
-        Enhanced Prompt: Design a modern, responsive portfolio website using only CSS and Tailwind CSS for styling. Focus on crafting a clean, intuitive UI with minimal external libraries. The website should include a dynamic landing page with smooth animations, clear sections for projects, skills, an about page, and a contact form. Emphasize mobile-first design, accessibility, and a visually stunning presentation that effectively showcases personal branding. Output only this enhanced query without any additional text.
-        `;
+1. **Retain all specific features** or domain details mentioned. For instance:
+   - If user says "Instagram-like platform," explicitly include user profiles, photo/video feed, likes, comments, direct messaging, stories, notifications, etc.
+   - If user says "e-commerce site," explicitly include product listings, cart, checkout, payment integration, etc.
+   - If user references UI design, emphasize CSS, Tailwind, responsiveness, minimal external libraries, and any special animations.
+
+2. **Expand the prompt** by detailing relevant best practices, performance considerations, or modern approaches—**but do not** remove or generalize away key features.
+
+3. If the user references **existing context** (like a partial codebase or prior instructions), incorporate that context. Otherwise, assume a new project.
+
+4. Output **only** the final enhanced query, with **no extra commentary** or disclaimers.
+
+Example:
+- **User Request**: "Create an Instagram-like platform with all functionalities."
+- **Enhanced Query**: "Build a fully featured Instagram-like social media platform with user profiles, photo and video feed, likes, comments, direct messaging, stories, push notifications, and an intuitive UI. Emphasize a modern, visually appealing design using CSS and Tailwind for responsiveness and minimal external libraries. Ensure a scalable backend with real-time updates, secure authentication, and best practices for performance. Incorporate smooth animations and a user-friendly interface to deliver an engaging experience. Output only this final enhanced query."
+`;
+
 
 
         const chatCompletion = await groq.chat.completions.create({

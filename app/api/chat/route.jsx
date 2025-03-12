@@ -2,13 +2,20 @@
 
 import { chatSession } from '@/config/AImodel';
 import PROMPT from '@/data/Prompt';
+import STATICPROMPT from '@/data/HTML-CSS-JS/Prompt';
 
 export async function POST(request) {
     try {
-        const { prompt } = await request.json();
+        const { prompt, framework } = await request.json();
 
+        let systemPrompt
+
+        if (framework === "reactjs") {
+            systemPrompt = PROMPT.CHAT_PROMPT;
+        } else {
+            systemPrompt = STATICPROMPT.CHAT_PROMPT;
+        }
         // Prepend a system prompt instructing a 5-10 line response.
-        const systemPrompt = PROMPT.CHAT_PROMPT;
         const modifiedPrompt = `${systemPrompt}\n\n${prompt}`;
 
         const result = await chatSession.sendMessage(modifiedPrompt);

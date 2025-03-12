@@ -5,6 +5,8 @@ import { SandpackProvider, SandpackPreview } from "@codesandbox/sandpack-react";
 import { useSearchParams } from "next/navigation";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import LookupReactNext from '@/data/Lookup';
+import LookupHTMLCSSJS from '@/data/HTML-CSS-JS/Lookup';
 
 const page = () => {
 
@@ -14,12 +16,17 @@ const page = () => {
 
         const convex = useConvex();
         const [files, setFiles] = useState({});
+        const [framework, setFramework] = useState("static");
+        const [entry, setEntry] = useState("");
+        const [sandpackRoot, setSandpackRoot] = useState("/");
         const [loading, setLoading] = useState(false);
+        const [sandpackDependencies, setSandpackDependencies] = useState(LookupHTMLCSSJS.DEPENDANCY.frontend);
 
         useEffect(() => {
             if (!workspaceId) return;
             fetchFiles(workspaceId);
         }, [workspaceId]);
+
 
         const fetchFiles = async (id) => {
             setLoading(true);
@@ -27,9 +34,19 @@ const page = () => {
                 const result = await convex.query(api.workspace.getWorkspace, {
                     workspaceId: id,
                 });
+                console.log(result);
                 // The result might look like: { Data: { "/index.html": { code: "..." }, ... } }
                 const fetchedFiles = result?.Data || {};
                 setFiles(fetchedFiles);
+                if (result.messages[0].framework === "reactjs") {
+                    setFramework("react");
+                    setEntry("frontend/src/index.js");
+                    setSandpackDependencies(LookupReactNext.DEPENDANCY.frontend);
+                } else {
+                    setFramework("static");
+                    setEntry("index.html");
+                    setSandpackDependencies(LookupHTMLCSSJS.DEPENDANCY.frontend);
+                }
             } catch (error) {
                 console.error("Failed to fetch files:", error);
             } finally {
@@ -37,17 +54,29 @@ const page = () => {
             }
         };
 
+
         // Show a custom loading UI while fetching from Convex
         if (loading) {
             return <LoadingUI />;
         }
 
+
         // Once we have the files, render the Sandpack preview in full screen
         return (
-            <div style={{ width: "100vw", height: "100vh" }}>
-                <SandpackProvider template="static" files={files}>
+            <div style={{ width: "100vw", height: "90vh" }}>
+                <SandpackProvider template={framework} root={sandpackRoot} files={files} customSetup={{
+                    entry: entry,
+                    dependencies: sandpackDependencies,
+                }}
+                    options={{
+                        externalResources: ['https://cdn.tailwindcss.com'],
+                        autorun: true,
+                        autoReload: true,
+                        // resizablePanels: true
+                    }}
+                >
                     <SandpackPreview
-                        style={{ width: "100%", height: "100vh" }}
+                        style={{ width: "100%", height: "90vh" }}
                         showNavigator
                     />
                 </SandpackProvider>

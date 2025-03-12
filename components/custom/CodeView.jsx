@@ -211,9 +211,9 @@ const CodeView = () => {
                     entry: sandpackEntry,
                 }}
                     options={{
-                        // externalResources: ['https://cdn.tailwindcss.com'],
-                        // autorun: true,
-                        // autoReload: true,
+                        externalResources: ['https://cdn.tailwindcss.com'],
+                        autorun: true,
+                        autoReload: true,
                         // resizablePanels: true
                     }}
                 >
