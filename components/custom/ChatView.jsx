@@ -5,10 +5,11 @@ import UserContext from '@/context/UserContext'
 import { api } from '@/convex/_generated/api'
 import { useConvex, useMutation } from 'convex/react'
 import Image from 'next/image'
-import { ArrowRight, Loader2Icon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
+import { ArrowRight, Loader2Icon, SidebarCloseIcon, SidebarOpenIcon, Sparkles } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSidebar } from '../ui/sidebar'
+import axios from 'axios'
 
 
 const ChatView = () => {
@@ -22,11 +23,11 @@ const ChatView = () => {
   const updateTokens = useMutation(api.users.updateToken);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toggleSidebar } = useSidebar();
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     if (user) {
       getWorkspaceData();
-      // console.log("user", user);
     }
   }, [id, user]);
 
@@ -109,6 +110,19 @@ const ChatView = () => {
   };
 
 
+  const enhancedPrompt = async () => {
+    try {
+      setIsGenerating(true);
+      const response = await axios.post("/api/prompt", { prompt: text });
+      setText(response.data.response);
+    } catch (error) {
+      console.error("Error enhancing prompt:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
+
   return (
 
     <div className="mx-auto max-w-4xl p-2">
@@ -164,12 +178,27 @@ const ChatView = () => {
           onChange={(e) => setText(e.target.value)}
         ></textarea>
         {text && (
-          <button
-            onClick={sendUserMessage}
-            className="bg-blue-500 hover:bg-blue-700 p-3 rounded-lg transition-colors duration-200"
-          >
-            <ArrowRight className="w-6 h-6 text-white" />
-          </button>
+          <div className="flex flex-col gap-2 items-center">
+            {/* Sparkles Button with Tooltip */}
+            <div className="relative group flex flex-col items-center">
+              <button className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 shadow-lg transform transition-all duration-500 hover:scale-110 hover:shadow-2xl focus:outline-none flex items-center justify-center" onClick={enhancedPrompt}>
+                <Sparkles className={`text-white w-5 h-5 ${isGenerating ? 'animate-spin' : ''}`} />
+              </button>
+
+              {/* Tooltip with Glassmorphism Effect */}
+              <div className="absolute bottom-8 px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-medium rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:-translate-y-2 shadow-lg">
+                Enhance Prompt with AI
+              </div>
+            </div>
+
+            {/* Arrow Button */}
+            <button
+              onClick={sendUserMessage}
+              className="bg-blue-500 hover:bg-blue-600 p-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
+            >
+              <ArrowRight className="w-4 h-4 text-white transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
+          </div>
         )}
       </div>
 

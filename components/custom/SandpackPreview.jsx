@@ -9,25 +9,25 @@ const SandpackPreviewClient = () => {
     const previewRef = useRef();
     const { action, setAction } = useContext(ActionContext);
 
-    useEffect(() => {
-        getSandpackClient();
-    }, [sandpack && action])
+    // useEffect(() => {
+    //     getSandpackClient();
+    // }, [sandpack && action])
 
 
-    const getSandpackClient = async () => {
-        const client = await previewRef.current?.getClient();
+    // const getSandpackClient = async () => {
+    //     const client = await previewRef.current?.getClient();
 
-        if (client) {
-            const result = await client.getCodeSandboxURL();
-            console.log(result);
+    //     if (client) {
+    //         const result = await client.getCodeSandboxURL();
+    //         console.log(result);
 
-            if (action?.action === "download") {
-                window.open(result.editorUrl);
-            } else if (action?.action === "deploy") {
-                window.open(`https://${result?.sandboxId}.csb.app/`, '_blank', 'noopener');
-            }
-        }
-    }
+    //         if (action?.action === "download") {
+    //             window.open(result.editorUrl);
+    //         } else if (action?.action === "deploy") {
+    //             window.open(`https://${result?.sandboxId}.csb.app/`, '_blank', 'noopener');
+    //         }
+    //     }
+    // }
 
 
     return (

@@ -7,7 +7,6 @@ import {
     SandpackCodeEditor,
     SandpackFileExplorer,
     ExportIcon,
-    SandpackConsole
 } from "@codesandbox/sandpack-react";
 import LookupReactNext from '@/data/Lookup';
 import PROMPTReactNext from '@/data/Prompt';
@@ -19,8 +18,8 @@ import MessagesContext from '@/context/MessagesContext';
 import axios from 'axios';
 import { useConvex, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { useParams } from 'next/navigation';
-import { Loader2Icon, Rocket } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { Loader2Icon, Rocket, ScreenShare } from 'lucide-react';
 import UserContext from '@/context/UserContext';
 import { Button } from '../ui/button';
 import SandpackPreviewClient from './SandpackPreview';
@@ -30,6 +29,7 @@ import { amethyst } from '@codesandbox/sandpack-themes';
 const CodeView = () => {
 
     const { id } = useParams();
+    const router = useRouter();
     const { user, setUser } = useContext(UserContext);
     const [activeTab, setactiveTab] = useState('code');
     const [files, setfiles] = useState();
@@ -184,6 +184,11 @@ const CodeView = () => {
     };
 
 
+    const handleFullScreen = () => {
+        router.push(`/Preview?workspaceId=${id}`);
+    }
+
+
     return (
 
         <div className='px-4'>
@@ -195,8 +200,8 @@ const CodeView = () => {
                 </div>
 
                 <div className='flex gap-2'>
-                    <Button variant="outline" className="bg-orange-500" onClick={() => handleAction("download")}><ExportIcon /> Download</Button>
-                    <Button variant="outline" className="bg-green-500" onClick={() => handleAction("deploy")}><Rocket /> Get URL</Button>
+                    {/* <Button variant="outline" className="bg-green-500" onClick={() => handleAction("download")}><ExportIcon /> Download</Button> */}
+                    <Button variant="outline" className="bg-orange-500" onClick={handleFullScreen}><ScreenShare />Go Full Screen</Button>
                 </div>
             </div>
 
@@ -206,10 +211,10 @@ const CodeView = () => {
                     entry: sandpackEntry,
                 }}
                     options={{
-                        externalResources: ['https://cdn.tailwindcss.com'],
-                        autorun: true,
-                        autoReload: true,
-                        resizablePanels: true
+                        // externalResources: ['https://cdn.tailwindcss.com'],
+                        // autorun: true,
+                        // autoReload: true,
+                        // resizablePanels: true
                     }}
                 >
                     <SandpackLayout>
