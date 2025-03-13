@@ -102,7 +102,9 @@ const AboutPage = () => {
     const [teamRef, teamVisible] = useOnScreen({ threshold: 0.1 });
 
     return (
+
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+
             {/* Hero Section */}
             <section
                 ref={heroRef}
@@ -136,7 +138,7 @@ const AboutPage = () => {
                             The future of web development is here—unleash your creativity with AI-powered tools.
                         </p>
                         <Button
-                            className="bg-blue-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-900 transition-colors animate-fade-in-delay"
+                            className="bg-blue-900 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors animate-fade-in-delay"
                         >
                             Get Started
                         </Button>
@@ -410,6 +412,7 @@ const AboutPage = () => {
             </section>
 
         </div>
+
     );
 };
 

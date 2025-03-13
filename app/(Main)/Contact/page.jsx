@@ -93,7 +93,7 @@ const ContactPage = () => {
                             Get in Touch
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl animate-fade-in-up-delay">
-                            Have questions or need support? We're here to help you with Bolt.New.
+                            Have questions or need support? We're here to help you with CodeCanvas AI.
                         </p>
                     </div>
                 </div>
@@ -197,12 +197,12 @@ const ContactPage = () => {
                             {
                                 icon: <i className="fas fa-envelope text-green-500 text-3xl"></i>,
                                 title: "Email",
-                                detail: "support@boltnew.com",
+                                detail: "support@codecanvasAI.com",
                             },
                             {
                                 icon: <i className="fas fa-map-marker-alt text-purple-500 text-3xl"></i>,
                                 title: "Address",
-                                detail: "123 AI Street, Tech City, USA",
+                                detail: "123 AI Street, Mumbai, India",
                             },
                         ].map((info, index) => (
                             <div
@@ -235,7 +235,7 @@ const ContactPage = () => {
                     <div className="max-w-4xl mx-auto">
                         {/* Google Maps Iframe */}
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.9537353153167!3d-37.81627927975195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f0d3d7f%3A0x5045675218ce7e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sus!4v1634567890123!5m2!1sen!2sus"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30153.61488462119!2d72.81417125816272!3d18.944836253023824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7ce16d6a87241%3A0x1e0119db8f9e9a56!2sMarine%20Dr%2C%20Mumbai%2C%20Maharashtra%2C%20India!5e0!3m2!1sen!2sus!4v1698771234567!5m2!1sen!2sus"
                             className="w-full h-96 rounded-lg animate-fade-in-up-delay"
                             allowFullScreen=""
                             loading="lazy"
@@ -243,6 +243,7 @@ const ContactPage = () => {
                     </div>
                 </div>
             </section>
+
             {/* Support Info Section */}
             <section
                 ref={supportRef}
@@ -256,7 +257,7 @@ const ContactPage = () => {
                     <div className="max-w-4xl mx-auto space-y-6">
                         {[
                             {
-                                question: "How can I get started with Bolt.New?",
+                                question: "How can I get started with CodeCanvas AI?",
                                 answer:
                                     "Simply sign up for a free account, describe your project, and let our AI generate the code for you. Check out our Getting Started guide for more details.",
                             },
@@ -266,9 +267,9 @@ const ContactPage = () => {
                                     "We offer community support for free users, priority email support for Pro users, and dedicated support for Enterprise users. You can also reach us via email or phone.",
                             },
                             {
-                                question: "Can I deploy my projects directly from Bolt.New?",
+                                question: "Can I download my projects directly from CodeCanvas AI?",
                                 answer:
-                                    "Yes! Bolt.New supports one-click deployment to platforms like Netlify, Vercel, and Cloudflare, making it easy to go from development to production.",
+                                    "Yes! CodeCanvas AI supports download of your projects through sandpack providers.",
                             },
                         ].map((faq, index) => (
                             <div
@@ -298,7 +299,7 @@ const ContactPage = () => {
                         Ready to Start Building?
                     </h2>
                     <p className="text-xl mb-8 max-w-2xl mx-auto animate-fade-in-up-delay">
-                        Join thousands of developers and create stunning applications with Bolt.New.
+                        Join thousands of developers and create stunning applications with CodeCanvas AI.
                     </p>
                     <Button className="bg-white text-indigo-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-transform hover:scale-105 animate-fade-in-up-delay">
                         Get Started
@@ -318,6 +319,7 @@ const ContactPage = () => {
             </section>
 
         </div>
+
     );
 };
 

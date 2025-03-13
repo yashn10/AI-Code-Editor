@@ -99,7 +99,7 @@ const FeedbackPage = () => {
                             Share Your Feedback
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl animate-fade-in-up-delay">
-                            Help us improve Bolt.New by sharing your thoughts and experiences.
+                            Help us improve CodeCanvas AI by sharing your thoughts and experiences.
                         </p>
                     </div>
                 </div>
@@ -288,7 +288,7 @@ const FeedbackPage = () => {
                         Ready to Start Building?
                     </h2>
                     <p className="text-xl mb-8 max-w-2xl mx-auto animate-fade-in-up-delay">
-                        Join thousands of developers and create stunning applications with Bolt.New.
+                        Join thousands of developers and create stunning applications with CodeCanvas AI.
                     </p>
                     <Button className="bg-white text-indigo-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-transform hover:scale-105 animate-fade-in-up-delay">
                         Get Started
