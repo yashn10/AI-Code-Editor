@@ -46,8 +46,8 @@ const Header = () => {
       <div className='flex gap-5'>
         <Link href={'/Home'} className='cursor-pointer'>Home</Link>
         <Link href={'/About'} className='cursor-pointer'>About</Link>
-        <h1 className='cursor-pointer'>Contact</h1>
-        <h1 className='cursor-pointer'>Feedback</h1>
+        <Link href={'/Contact'} className='cursor-pointer'>Contact</Link>
+        <Link href={'/Feedback'} className='cursor-pointer'>Feedback</Link>
       </div>
 
 

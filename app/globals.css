@@ -1,12 +1,197 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   font-family: 'Inter', sans-serif;
 }
+
+
+
+
+/* Home Page */
+
+/* Fade-in and Slide-up animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+.animate-fade-in-up-delay {
+  animation: fade-in-up 1s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+/* Particle animation */
+@keyframes particle {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-50vh) translateX(30px);
+    opacity: 0;
+  }
+}
+
+.animate-particle {
+  animation: particle 8s infinite linear;
+}
+
+/* Glassmorphism effect (optional for future sections) */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+
+
+
+/* About Page */
+
+/* Fade-in animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+.animate-fade-in-delay {
+  animation: fade-in 1s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+/* Expand animation for How to Use section */
+@keyframes expand {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+
+  to {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+.animate-expand {
+  animation: expand 0.5s ease-out forwards;
+}
+
+/* Particle-like animation for Hero section */
+@keyframes particle {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(-100vh) translateX(50px);
+    opacity: 0;
+  }
+}
+
+.animate-particle {
+  animation: particle 10s infinite linear;
+  animation-delay: calc(var(--delay) * 1s);
+}
+
+/* Set different delays for each particle */
+.absolute:nth-child(1) {
+  --delay: 0;
+}
+
+.absolute:nth-child(2) {
+  --delay: 1;
+}
+
+.absolute:nth-child(3) {
+  --delay: 2;
+}
+
+.absolute:nth-child(4) {
+  --delay: 3;
+}
+
+.absolute:nth-child(5) {
+  --delay: 4;
+}
+
+.absolute:nth-child(6) {
+  --delay: 5;
+}
+
+.absolute:nth-child(7) {
+  --delay: 6;
+}
+
+.absolute:nth-child(8) {
+  --delay: 7;
+}
+
+.absolute:nth-child(9) {
+  --delay: 8;
+}
+
+.absolute:nth-child(10) {
+  --delay: 9;
+}
+
+.absolute:nth-child(11) {
+  --delay: 10;
+}
+
+.absolute:nth-child(12) {
+  --delay: 11;
+}
+
+.absolute:nth-child(13) {
+  --delay: 12;
+}
+
+.absolute:nth-child(14) {
+  --delay: 13;
+}
+
+.absolute:nth-child(15) {
+  --delay: 14;
+}
+
+
 
 
 @layer base {
