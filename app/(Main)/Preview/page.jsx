@@ -76,7 +76,7 @@ const page = () => {
                     }}
                 >
                     <SandpackPreview
-                        style={{ width: "100%", height: "90vh" }}
+                        style={{ width: "100%", height: "100vh" }}
                         showNavigator
                     />
                 </SandpackProvider>
