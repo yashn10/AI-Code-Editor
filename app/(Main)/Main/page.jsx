@@ -92,8 +92,11 @@ const Main = () => {
 
     <div className='flex flex-col text-center w-full'>
 
-      <div className='w-full'>
-        <SidebarOpen className='bg-gray-900 hover:bg-gray-800 p-2 w-10 h-8 rounded-sm cursor-pointer' onClick={toggleSidebar}></SidebarOpen>
+      <div className="w-full">
+        <SidebarOpen
+          className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 p-2 w-10 h-8 rounded-sm cursor-pointer"
+          onClick={toggleSidebar}
+        />
       </div>
 
 
@@ -101,22 +104,25 @@ const Main = () => {
         <h1 className='font-extrabold text-6xl tracking-tight bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-transparent bg-clip-text'>Innovate with AI</h1>
         <p className='text-xl mt-4 bg-gradient-to-r from-pink-500 to-yellow-500 text-transparent bg-clip-text'>Effortless Code Generation at Your Fingertips</p>
 
-        <div className="flex items-center gap-2 mt-4 w-full h-40 max-w-xl border border-gray-300 rounded-md shadow-lg bg-[#121212]">
-          <textarea className="p-4 w-full h-full outline-none bg-transparent resize-none text-white placeholder-gray-500" placeholder="Type something like create a fullstack blog app..." value={text} onChange={(e) => { setText(e.target.value) }}></textarea>
+        <div className="flex items-center gap-2 mt-4 w-full h-40 max-w-xl border border-gray-300 dark:border-gray-700 rounded-md shadow-lg bg-gray-100 dark:bg-[#121212]">
+          <textarea
+            className="p-4 w-full h-full outline-none bg-transparent resize-none text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+            placeholder="Type something like create a fullstack blog app..."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          ></textarea>
 
-          {text &&
+          {text && (
             <div className="flex flex-col items-center justify-center mr-2">
               {/* Enhance Prompt Button */}
-              <div
-                onClick={enhancedPrompt}
-                className="relative group cursor-pointer"
-              >
-                {/* Animated circular button with gradient background */}
+              <div onClick={enhancedPrompt} className="relative group cursor-pointer">
                 <div className="w-12 h-12 mb-2 flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 shadow-xl transform transition duration-500 group-hover:scale-110">
                   <Sparkles className={`w-6 h-6 text-white ${isGenerating ? "animate-spin" : ""}`} />
                 </div>
-                {/* Tooltip that appears on hover */}
-                <div className="absolute transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-300 text-xs text-white font-semibold" style={{ left: "200%", top: "10%" }}>
+                <div
+                  className="absolute transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-300 text-xs text-white font-semibold"
+                  style={{ left: "200%", top: "10%" }}
+                >
                   Enhance Prompt with AI
                 </div>
               </div>
@@ -124,13 +130,12 @@ const Main = () => {
               {/* Submit Prompt Button */}
               <div
                 onClick={() => handleClick(text)}
-                className="w-12 h-12 mt-2 flex items-center justify-center rounded-full bg-blue-600 shadow-xl hover:bg-blue-700 transition duration-300 transform hover:scale-105 cursor-pointer"
+                className="w-12 h-12 mt-2 flex items-center justify-center rounded-full bg-blue-600 dark:bg-blue-500 shadow-xl hover:bg-blue-700 dark:hover:bg-blue-600 transition duration-300 transform hover:scale-105 cursor-pointer"
               >
                 <ArrowRight className={`w-6 h-6 text-white ${loading ? "animate-spin" : ""}`} />
               </div>
             </div>
-
-          }
+          )}
         </div>
 
         <Signin openDialogue={openDialogue} closeDialogue={() => setOpenDialogue(false)} />

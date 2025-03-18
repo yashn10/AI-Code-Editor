@@ -93,18 +93,18 @@ const HomePage = () => {
                         </p>
                         <div className="space-x-4">
                             <Link
-                                href="/Main"
+                                href="/Dashboard"
                                 className="bg-blue-900 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-transform hover:scale-105 animate-fade-in-up-delay"
                             >
                                 Get Started
                             </Link>
-                            <Button
+                            {/* <Button
                                 variant="outline"
                                 className="text-white border-white hover:bg-white hover:text-blue-600 transition-transform hover:scale-105 animate-fade-in-up-delay"
                                 onClick={() => setIsModalOpen(true)}
                             >
                                 Request a Demo
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                 </div>
@@ -210,7 +210,9 @@ const HomePage = () => {
                             <p className="text-gray-600 dark:text-gray-400">
                                 Your live editor or preview would appear here.
                             </p>
-                            <Button className="mt-4 bg-blue-600 hover:bg-blue-700">Try it Now</Button>
+                            <Button className="mt-4 bg-blue-600 hover:bg-blue-700">
+                                <Link href="/Dashboard">Try it Now</Link>
+                            </Button>
                         </div>
                     </div>
                 </div>

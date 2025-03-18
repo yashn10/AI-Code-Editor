@@ -12,6 +12,7 @@ import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import ActionContext from '@/context/ActionContext'
 import { useRouter } from 'next/navigation'
+import WireframecodeContext from '@/context/WireframecodeContext'
 
 const Provider = ({ children }) => {
 
@@ -21,6 +22,7 @@ const Provider = ({ children }) => {
     const [message, setmessage] = useState([]);
     const [user, setUser] = useState();
     const [action, setAction] = useState();
+    const [wireframecode, setWireframecode] = useState();
     const convex = useConvex();
 
     useEffect(() => {
@@ -46,20 +48,22 @@ const Provider = ({ children }) => {
             <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_AUTH_CLIENT_ID}>
                 <UserContext.Provider value={{ user, setUser }}>
                     <MessagesContext.Provider value={{ message, setmessage }}>
-                        <ActionContext.Provider value={{ action, setAction }}>
-                            <NextThemesProvider
-                                attribute="class"
-                                defaultTheme="dark"
-                                enableSystem
-                                disableTransitionOnChange
-                            >
-                                <Header />
-                                <SidebarProvider defaultOpen={false}>
-                                    <AppSidebar />
-                                    {children}
-                                </SidebarProvider>
-                            </NextThemesProvider>
-                        </ActionContext.Provider>
+                        <WireframecodeContext.Provider value={{ wireframecode, setWireframecode }}>
+                            <ActionContext.Provider value={{ action, setAction }}>
+                                <NextThemesProvider
+                                    attribute="class"
+                                    defaultTheme="dark"
+                                    enableSystem
+                                    disableTransitionOnChange
+                                >
+                                    <Header />
+                                    <SidebarProvider defaultOpen={false}>
+                                        <AppSidebar />
+                                        {children}
+                                    </SidebarProvider>
+                                </NextThemesProvider>
+                            </ActionContext.Provider>
+                        </WireframecodeContext.Provider>
                     </MessagesContext.Provider>
                 </UserContext.Provider>
             </GoogleOAuthProvider>

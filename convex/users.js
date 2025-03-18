@@ -1,6 +1,7 @@
 const { v } = require("convex/values");
 const { mutation, query } = require("./_generated/server");
 
+
 export const CreateUser = mutation({
     args: {
         uid: v.string(),
@@ -19,13 +20,15 @@ export const CreateUser = mutation({
                 name: args.name,
                 email: args.email,
                 image: args.image,
-                token: 50000
+                credits: 5,
+                // token: 50000
             });
 
             console.log(newUser);
         }
     }
 })
+
 
 export const GetUser = query({
     args: {
@@ -39,14 +42,15 @@ export const GetUser = query({
     }
 })
 
-export const updateToken = mutation({
+
+export const updateCredits = mutation({
     args: {
-        token: v.number(),
+        credits: v.number(),
         _id: v.id('users'),
     },
     handler: async (ctx, args) => {
         const result = await ctx.db.patch(args._id, {
-            token: args.token
+            credits: args.credits
         });
         return result;
     }

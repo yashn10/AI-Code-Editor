@@ -2,57 +2,49 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { SandpackProvider, SandpackPreview } from "@codesandbox/sandpack-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import LookupReactNext from '@/data/Lookup';
-import LookupHTMLCSSJS from '@/data/HTML-CSS-JS/Lookup';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+
 
 const page = () => {
 
     function PreviewContent() {
         const searchParams = useSearchParams();
-        const workspaceId = searchParams.get("workspaceId");
-
+        const wireframeId = searchParams.get("wireframeId");
+        const router = useRouter();
         const convex = useConvex();
-        const [files, setFiles] = useState({});
-        const [framework, setFramework] = useState("static");
-        const [entry, setEntry] = useState("");
-        const [sandpackRoot, setSandpackRoot] = useState("/");
+        const [code, setCode] = useState("");
         const [loading, setLoading] = useState(false);
-        const [sandpackDependencies, setSandpackDependencies] = useState(LookupHTMLCSSJS.DEPENDANCY.frontend);
 
         useEffect(() => {
-            if (!workspaceId) return;
-            fetchFiles(workspaceId);
-        }, [workspaceId]);
+            if (!wireframeId) return;
+            fetchFiles(wireframeId);
+        }, [wireframeId]);
 
 
         const fetchFiles = async (id) => {
             setLoading(true);
             try {
-                const result = await convex.query(api.workspace.getWorkspace, {
-                    workspaceId: id,
+                const result = await convex.query(api.wireframeToCode.GetWireframeToCode, {
+                    _id: id,
                 });
+                setCode(result.Data.response);
                 console.log(result);
-                // The result might look like: { Data: { "/index.html": { code: "..." }, ... } }
-                const fetchedFiles = result?.Data || {};
-                setFiles(fetchedFiles);
-                if (result.messages[0].framework === "reactjs") {
-                    setFramework("react");
-                    setEntry("frontend/src/index.js");
-                    setSandpackDependencies(LookupReactNext.DEPENDANCY.frontend);
-                } else {
-                    setFramework("static");
-                    setEntry("index.html");
-                    setSandpackDependencies(LookupHTMLCSSJS.DEPENDANCY.frontend);
-                }
+
             } catch (error) {
-                console.error("Failed to fetch files:", error);
+                console.error("Failed to fetch code:", error);
             } finally {
                 setLoading(false);
             }
         };
+
+
+        // const handleExitFullScreen = () => {
+        //     router.push(`/view-code/${wireframeId}`);
+        // };
 
 
         // Show a custom loading UI while fetching from Convex
@@ -63,16 +55,17 @@ const page = () => {
 
         // Once we have the files, render the Sandpack preview in full screen
         return (
-            <div style={{ width: "100vw", height: "90vh" }}>
-                <SandpackProvider template={framework} root={sandpackRoot} files={files} customSetup={{
-                    entry: entry,
-                    dependencies: sandpackDependencies,
+            <div style={{ width: "100vw", height: "100vh" }}>
+                {/* <Button variant="outline" onClick={handleExitFullScreen} className="absolute top-4 left-4 z-10">
+                    <ArrowLeft /> Exit Full Screen
+                </Button> */}
+                <SandpackProvider template="react" files={{
+                    "/App.js": `${code}`
                 }}
                     options={{
                         externalResources: ['https://cdn.tailwindcss.com'],
                         autorun: true,
                         autoReload: true,
-                        // resizablePanels: true
                     }}
                 >
                     <SandpackPreview

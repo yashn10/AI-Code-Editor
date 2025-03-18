@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as users from "../users.js";
+import type * as wireframeToCode from "../wireframeToCode.js";
 import type * as workspace from "../workspace.js";
 
 /**
@@ -26,6 +27,7 @@ import type * as workspace from "../workspace.js";
  */
 declare const fullApi: ApiFromModules<{
   users: typeof users;
+  wireframeToCode: typeof wireframeToCode;
   workspace: typeof workspace;
 }>;
 export declare const api: FilterApi<

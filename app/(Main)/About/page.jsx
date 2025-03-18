@@ -9,6 +9,7 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 // Custom Intersection Observer Hook for Scroll Animations
 const useOnScreen = (options) => {
@@ -137,11 +138,11 @@ const AboutPage = () => {
                         <p className="text-xl md:text-2xl text-gray-200 mb-6 max-w-2xl animate-fade-in-delay">
                             The future of web development is here—unleash your creativity with AI-powered tools.
                         </p>
-                        <Button
+                        <Link href={"/Dashboard"}
                             className="bg-blue-900 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors animate-fade-in-delay"
                         >
                             Get Started
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -187,7 +188,7 @@ const AboutPage = () => {
             >
                 <div className="container mx-auto px-4">
                     <h2 className="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
-                        Why Choose Bolt.New?
+                        Why Choose CodeCanvas AI?
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         {[
@@ -390,13 +391,13 @@ const AboutPage = () => {
                         Ready to Boost Your Development?
                     </h2>
                     <p className="text-xl mb-8 max-w-2xl mx-auto animate-fade-in-delay">
-                        Join thousands of developers using Bolt.New to create stunning applications faster.
+                        Join thousands of developers using CodeCanvas AI to create stunning applications and websites faster.
                     </p>
-                    <Button
+                    <Link href={"/Dashboard"}
                         className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-transform duration-300 hover:scale-105 animate-fade-in-delay"
                     >
                         Get Started
-                    </Button>
+                    </Link>
                     <div className="mt-8 flex justify-center space-x-6 animate-fade-in-delay">
                         <a href="#" className="hover:text-gray-200">
                             <i className="fab fa-facebook-f"></i>

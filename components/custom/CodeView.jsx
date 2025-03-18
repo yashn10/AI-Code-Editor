@@ -38,7 +38,7 @@ const CodeView = () => {
     const { action, setAction } = useContext(ActionContext);
     const [loading, setloading] = useState(false);
     const convex = useConvex();
-    const updateTokens = useMutation(api.users.updateToken);
+    const updateCredits = useMutation(api.users.updateCredits);
     const [currentLookup, setCurrentLookup] = useState(); // State for dynamic Lookup
     const [currentPrompt, setCurrentPrompt] = useState(); // State for dynamic Prompt
     const [sandpackTemplate, setSandpackTemplate] = useState("static"); // State for Sandpack template
@@ -140,14 +140,6 @@ const CodeView = () => {
     }, [sandpackEntry, sandpackTemplate, sandpackDependencies, currentPrompt, loading]);
 
 
-    const countTokens = (text) => {
-        if (typeof text !== 'string') {
-            return 0;
-        }
-        return text.trim().split(/\s+/).length;
-    }
-
-
     const generateCode = async () => {
         setloading(true);
         try {
@@ -171,11 +163,7 @@ const CodeView = () => {
 
             await updateFiles({ workspaceId: id, files: combinedFiles });
 
-            const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
-            const tokensUsed = countTokens(AIresponse.response);
-            const remainingTokens = currentTokens - tokensUsed;
-
-            await updateTokens({ token: remainingTokens, _id: user._id });
+            await updateCredits({ _id: user._id, credits: user.credits - 2 });
         } catch (error) {
             console.error("Error in generateCode:", error);
         } finally {
