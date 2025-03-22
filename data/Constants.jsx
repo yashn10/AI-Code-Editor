@@ -50,10 +50,15 @@ export default {
             modelName: "google/gemini-2.0-flash-lite-preview-02-05:free"
         },
         {
-            name: "Mistral Small",
+            name: "Mistral Small 3",
             value: "Mistral Small 3",
             modelName: "mistralai/mistral-small-24b-instruct-2501:free"
         },
+        // {
+        //     name: "Mistral Small 3.1",
+        //     value: "Mistral Small 3.1",
+        //     modelName: "mistralai/mistral-small-3.1-24b-instruct:free"
+        // },
         {
             name: "Gemini Flash Thinking",
             value: "Gemini 2.0 Flash Thinking",
