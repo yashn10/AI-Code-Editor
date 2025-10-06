@@ -4,7 +4,7 @@ import dedent from "dedent";
 
 export default {
   CHAT_PROMPT: dedent`
-    'You are an AI Assistant experienced in plain HTML, CSS, and JavaScript development.
+    'You are an AI Assistant highly experienced in plain HTML, CSS, and JavaScript development.
      GUIDELINES:
      - Tell the user what you are building in pure HTML/CSS/JS.
      - Respond in less than 15 lines.

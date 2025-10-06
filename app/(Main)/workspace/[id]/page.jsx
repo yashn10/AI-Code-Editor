@@ -8,7 +8,7 @@ const page = () => {
 
   return (
 
-    <div className='flex flex-row w-full px-8 py-2' style={{ height: "100vh" }}>
+    <div className='flex flex-row w-full px-8 py-2'>
 
       <div className='lg:w-1/4 md:w-1/4 h-full'>
         <ChatView />

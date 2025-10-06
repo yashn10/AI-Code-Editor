@@ -7,7 +7,7 @@ export async function POST(req) {
         const { model, prompt, imageUrl } = await req.json();
         const newPrompt = [Constants.PROMPT_OLD, prompt];
         const selectedModel = Constants.AiModelList.find(aiModel => aiModel.value === model);
-        const modelName = selectedModel ? selectedModel.modelName : "google/gemini-2.0-pro-exp-02-05:free";
+        const modelName = selectedModel ? selectedModel.modelName : "google/gemini-2.5-pro-exp-03-25:free";
 
         const apiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",

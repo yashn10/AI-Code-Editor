@@ -20,7 +20,7 @@ const ChatView = () => {
   const { message, setmessage } = useContext(MessagesContext);
   const { user, setUser } = useContext(UserContext);
   const updateMessage = useMutation(api.workspace.updateWorkspace);
-  const updateTokens = useMutation(api.users.updateToken);
+  // const updateTokens = useMutation(api.users.updateToken);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toggleSidebar } = useSidebar();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -68,15 +68,15 @@ const ChatView = () => {
         await updateMessage({ workspaceId: id, messages: [...message, botMessage] });
 
         // Use fallback for currentTokens if user.token is not a valid number.
-        const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
-        const tokensUsed = countTokens(botMessage.prompt);
-        const remainingTokens = currentTokens - tokensUsed;
+        // const currentTokens = !isNaN(Number(user.token)) ? Number(user.token) : 50000;
+        // const tokensUsed = countTokens(botMessage.prompt);
+        // const remainingTokens = currentTokens - tokensUsed;
 
         // Update tokens in the database
-        await updateTokens({
-          token: remainingTokens,
-          _id: user._id
-        });
+        // await updateTokens({
+        //   token: remainingTokens,
+        //   _id: user._id
+        // });
 
         setIsAwaitingResponse(false);
       } else {

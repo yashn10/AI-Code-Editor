@@ -10,8 +10,6 @@ import {
 } from "@codesandbox/sandpack-react";
 import LookupReactNext from '@/data/Lookup';
 import PROMPTReactNext from '@/data/Prompt';
-// import LookupAngular from '@/data/Angular/Lookup'; // Angular Lookup
-// import PROMPTAngular from '@/data/Angular/Prompt'; // Angular Prompt
 import LookupHTMLCSSJS from '@/data/HTML-CSS-JS/Lookup'; // HTML CSS JS Lookup
 import PROMPTHTMLCSSJS from '@/data/HTML-CSS-JS/Prompt'; // HTML CSS JS Prompt
 import MessagesContext from '@/context/MessagesContext';
@@ -39,8 +37,8 @@ const CodeView = () => {
     const [loading, setloading] = useState(false);
     const convex = useConvex();
     const updateCredits = useMutation(api.users.updateCredits);
-    const [currentLookup, setCurrentLookup] = useState(); // State for dynamic Lookup
-    const [currentPrompt, setCurrentPrompt] = useState(); // State for dynamic Prompt
+    const [currentLookup, setCurrentLookup] = useState(LookupHTMLCSSJS); // State for dynamic Lookup
+    const [currentPrompt, setCurrentPrompt] = useState(PROMPTHTMLCSSJS); // State for dynamic Prompt
     const [sandpackTemplate, setSandpackTemplate] = useState("static"); // State for Sandpack template
     const [sandpackEntry, setSandpackEntry] = useState("");
     const [sandpackRoot, setSandpackRoot] = useState("/");

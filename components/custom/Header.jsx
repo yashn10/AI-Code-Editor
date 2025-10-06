@@ -69,12 +69,6 @@ const Header = () => {
           <Link href="/pricing" className="hover:text-purple-300 transition-colors">
             Pricing
           </Link>
-          <Link href="/Blog" className="hover:text-purple-300 transition-colors">
-            Blog
-          </Link>
-          <Link href="/Documentation" className="hover:text-purple-300 transition-colors">
-            Documentation
-          </Link>
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -106,12 +100,6 @@ const Header = () => {
                 </Link>
                 <Link href="/pricing" className="text-white hover:text-purple-300 transition-colors">
                   Pricing
-                </Link>
-                <Link href="/Blog" className="text-white hover:text-purple-300 transition-colors">
-                  Blog
-                </Link>
-                <Link href="/Documentation" className="text-white hover:text-purple-300 transition-colors">
-                  Documentation
                 </Link>
               </nav>
             </SheetContent>

@@ -43,7 +43,7 @@ Example:
 
         const chatCompletion = await groq.chat.completions.create({
             messages: [{ role: "user", content: enhancedPrompt }],
-            model: "mixtral-8x7b-32768",
+            model: "qwen/qwen3-32b",
             temperature: 0.8,
             max_completion_tokens: 1024,
             top_p: 0.9,

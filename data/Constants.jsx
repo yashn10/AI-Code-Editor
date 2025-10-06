@@ -1,7 +1,7 @@
 import dedent from 'dedent';
 export default {
     PROMPT_OLD: dedent`
-    You are an expert frontend frontend React developer. You will be given a image url and description(optional) of a website from the user, and then you will return code for it  using React Javascript and Tailwind CSS. Follow the instructions carefully, it is very important for my job. I will tip you $1 million if you do a good job:
+    You are an expert frontend React developer. You will be given a image url and description(optional) of a website from the user, and then you will return code for it  using React Javascript and Tailwind CSS. Follow the instructions carefully, it is very important for my job. I will tip you $1 million if you do a good job:
 
 - Think carefully step by step about how to recreate the UI described in the prompt or image.
 - Create a React component for whatever the user asked you to create and make sure it can run by itself by using a default export
@@ -41,39 +41,49 @@ export default {
     AiModelList: [
         {
             name: "Gemini Pro (Preferred)",
-            value: "Gemini 2.0 Pro",
-            modelName: "google/gemini-2.0-pro-exp-02-05:free"
-        },
-        {
-            name: "Gemini Flash Lite",
-            value: "Gemini 2.0 Flash Lite",
-            modelName: "google/gemini-2.0-flash-lite-preview-02-05:free"
+            value: "Gemini 2.5 Pro",
+            modelName: "google/gemini-2.5-pro-exp-03-25:free"
         },
         {
             name: "Mistral Small 3",
             value: "Mistral Small 3",
             modelName: "mistralai/mistral-small-24b-instruct-2501:free"
         },
-        // {
-        //     name: "Mistral Small 3.1",
-        //     value: "Mistral Small 3.1",
-        //     modelName: "mistralai/mistral-small-3.1-24b-instruct:free"
-        // },
-        {
-            name: "Gemini Flash Thinking",
-            value: "Gemini 2.0 Flash Thinking",
-            modelName: "google/gemini-2.0-flash-thinking-exp:free"
-        },
         {
             name: "Gemini Flash",
             value: "Gemini 2.0 Flash",
             modelName: "google/gemini-2.0-flash-exp:free"
         },
+        {
+            name: "Gemini Flash Thinking",
+            value: "Gemini 2.0 Flash Thinking",
+            modelName: "google/gemini-2.0-flash-thinking-exp:free"
+        },
         // {
-        //     name: "Qwen",
-        //     value: "Qwen",
-        //     modelName: "qwen/qwen-vl-plus:free"
-        // }
+        //     name: "Mistral Small 3.1",
+        //     value: "Mistral Small 3.1",
+        //     modelName: "mistralai/mistral-small-3.1-24b-instruct:free"
+        // },
+        // {
+        //     name: "Quasar Alpha",
+        //     value: "Quasar Alpha",
+        //     modelName: "openrouter/quasar-alpha"
+        // },
+        // {
+        //     name: "Llama 4 Maverick",
+        //     value: "Llama 4 Maverick",
+        //     modelName: "meta-llama/llama-4-maverick:free"
+        // },
+        // {
+        //     name: "Llama 4 Scout",
+        //     value: "Llama 4 Scout",
+        //     modelName: "meta-llama/llama-4-scout:free"
+        // },
+        // {
+        //     name: "DeepSeek V3",
+        //     value: "DeepSeek V3",
+        //     modelName: "deepseek/deepseek-v3-base:free"
+        // },
     ],
     DEPENDANCY: {
 

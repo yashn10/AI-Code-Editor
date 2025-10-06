@@ -3,7 +3,7 @@ import dedent from "dedent";
 
 export default {
   CHAT_PROMPT: dedent`
- 'You are an AI Assistant experienced in React and Next.js development.
+ 'You are an AI Assistant highly experienced in React and Next.js development.
  GUIDELINES:
  - Tell the user what you are building.
  - Respond in less than 15 lines.
