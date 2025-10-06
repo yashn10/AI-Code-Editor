@@ -37,8 +37,8 @@ const CodeView = () => {
     const [loading, setloading] = useState(false);
     const convex = useConvex();
     const updateCredits = useMutation(api.users.updateCredits);
-    const [currentLookup, setCurrentLookup] = useState(LookupHTMLCSSJS); // State for dynamic Lookup
-    const [currentPrompt, setCurrentPrompt] = useState(PROMPTHTMLCSSJS); // State for dynamic Prompt
+    const [currentLookup, setCurrentLookup] = useState(LookupHTMLCSSJS.DEFAULT_FILE); // State for dynamic Lookup
+    const [currentPrompt, setCurrentPrompt] = useState(PROMPTHTMLCSSJS.CODE_GEN_PROMPT); // State for dynamic Prompt
     const [sandpackTemplate, setSandpackTemplate] = useState("static"); // State for Sandpack template
     const [sandpackEntry, setSandpackEntry] = useState("");
     const [sandpackRoot, setSandpackRoot] = useState("/");
@@ -145,13 +145,24 @@ const CodeView = () => {
             const prompt = JSON.stringify(message) + " " + currentPrompt;
             const response = await axios.post('/api/code', { prompt });
             const AIresponse = response.data;
+            console.log("AIresponse", AIresponse);
 
-            const combinedFiles = {
-                ...AIresponse?.frontend?.files,
-                ...AIresponse?.backend?.files,
-            };
+            // Handle both structured (frontend/backend) and flat (files) responses
+            let combinedFiles = {};
+            if (AIresponse?.frontend?.files || AIresponse?.backend?.files) {
+                // Structured response
+                combinedFiles = {
+                    ...AIresponse.frontend?.files,
+                    ...AIresponse.backend?.files,
+                };
+            } else if (AIresponse?.files) {
+                // Flat response - assume frontend
+                combinedFiles = AIresponse.files;
+            } else {
+                throw new Error("Invalid response structure: no files found");
+            }
 
-            // console.log(combinedFiles);
+            console.log(combinedFiles);
 
             // Merge with the current files to retain previous code
             setfiles(prevFiles => {

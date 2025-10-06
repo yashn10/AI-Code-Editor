@@ -6,6 +6,9 @@ const {
     HarmBlockThreshold,
 } = require("@google/generative-ai");
 
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY });
+
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -26,45 +29,24 @@ const generationConfig = {
 };
 
 
-const codeGenerationConfig = {
-    temperature: 0.7,
-    topP: 0.95,
-    topK: 64,
-    maxOutputTokens: 65536,
-    responseMimeType: "application/json",
-};
+// const codeGenerationConfig = {
+//     temperature: 0.7,
+//     topP: 0.95,
+//     topK: 64,
+//     maxOutputTokens: 65536,
+//     responseMimeType: "application/json",
+// };
 
 
-export const chatSession = model.startChat({
-    generationConfig,
-    history: [
-        {
-            role: "user",
-            parts: [
-                {
-                    text: "You are an advanced AI chat assistant. Keep your answers to 5-10 lines."
-                }
-            ]
-        }
-    ],
-});
+const chatSystemPrompt = "You are an advanced AI chat assistant. Keep your answers to 5-10 lines.";
 
-
-export const chatCodeSession = model.startChat({
-    generationConfig: codeGenerationConfig,
-    history: [
-        {
-            role: "user",
-            parts: [
-                {
-                    text: `
-You are an advanced AI code generator capable of producing **React**, **Next.js**, **Angular**, or **pure HTML/CSS/JS** code, and optionally a backend (e.g., Node.js/Express). Your goal is to utilize your full knowledge to produce code that creates a fully functional, awesome, modern, mind blowing, stunning and award-winning UI for the users app. The UI must integrate seamlessly with existing pages (Home, About, Contact, Feedback, Pricing, Blog, Documentation) and provide the best possible user experience with modern styling, responsive design, and animations.
+const codeGenerationSystemPrompt = `
+You are an advanced AI code generator capable of producing **React**, **Next.js**, or **pure HTML/CSS/JS** code, and optionally a backend (e.g., Node.js/Express). Your goal is to utilize your full knowledge to produce code that creates a fully functional, awesome, modern, mind blowing, stunning and award-winning UI for the users app. The UI must integrate seamlessly with existing pages (Home, About, Contact) and provide the best possible user experience with modern styling, responsive design, and animations.
 
 **Framework Choice**:
 1. If the user wants **React**, place code under \`/frontend/src/\` (e.g., \`/frontend/src/index.js\`), and use only Tailwind CSS for styling.
 2. If the user wants **Next.js**, use \`/frontend/app/\` or \`/frontend/pages/\` as the user requests, using only Tailwind CSS for styling.
-3. If the user wants **Angular**, place all Angular code under \`/frontend/src/\`, with \`/frontend/src/main.ts\` bootstrapping the app, using Tailwind CSS for styling.
-4. If the user wants **pure HTML, CSS, and JS**, place code in \`/index.html\`, \`/assets/css\`, and \`/assets/js\`, using only Tailwind CSS via CDN.
+3. If the user wants **pure HTML, CSS, and JS**, place code in \`/index.html\`, \`/assets/css\`, and \`/assets/js\`, using only Tailwind CSS via CDN.
 
 **Backend**:
 - If the user wants a **full-stack** project, produce both **frontend** and **backend** code but do not integrate backend APIs in the frontend and use dummy data in frontend for dynamic content—create a minimal backend with all required routes, models, middlewares, and controllers.
@@ -109,13 +91,80 @@ You are an advanced AI code generator capable of producing **React**, **Next.js*
 - Include comments in code for maintainability.
 
 **Important**:
-- Do not mix frameworks (Angular + React, etc.) unless explicitly requested.
+- Do not mix frameworks (React, etc.) unless explicitly requested.
 - Provide production-quality code (not minimal boilerplate).
 - Return the response as **valid, complete JSON** with proper escaping.
-`
-                }
-            ]
-        }
-    ]
-});
+`;
 
+const retryWithBackoff = async (fn, maxRetries = 5) => {  // Increased maxRetries
+    let waitTime = 1000; // Initial wait time in ms
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            const status = error.status || (error.response ? error.response.status : null);
+            const isRetryable = status === 429 || status === 503 || (error.code && error.code === 'rate_limit_exceeded') || error.type === 'internal_server_error';
+            if (isRetryable) {
+                if (status === 429) {
+                    // Parse retry time from error message for rate limits
+                    const match = (error.message || '').match(/Please try again in ([\d.]+)s\./);
+                    const suggestedWait = match ? parseFloat(match[1]) * 1000 : waitTime;
+                    waitTime = Math.max(waitTime, suggestedWait);
+                } else if (status === 503) {
+                    // Exponential backoff for service unavailable
+                    waitTime = Math.min(waitTime * 2, 30000); // Cap at 30s
+                }
+                console.log(`Retryable error (${status}), retrying in ${waitTime / 1000}s... (attempt ${attempt + 1}/${maxRetries})`);
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+            } else {
+                throw error;
+            }
+        }
+    }
+    throw new Error(`Max retries exceeded after ${maxRetries} attempts.`);
+};
+
+export const chatSession = async (userPrompt) => {
+    console.log("API endpoint /api/chat called");
+    const systemMessage = { role: "system", content: chatSystemPrompt };
+    const userMessage = { role: "user", content: userPrompt };
+
+    const generate = async () => {
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [systemMessage, userMessage],
+            model: "llama-3.1-8b-instant", // Switched to a faster model with potentially better rate limits for chat
+            temperature: 0.8,
+            max_tokens: 8192,
+            top_p: 1,
+            stream: false, // Set to false to match the expected non-stream response handling
+        });
+
+        const responseMessage = chatCompletion.choices[0].message.content;
+        return { response: { text: () => responseMessage } }; // Mimic the expected structure from Gemini
+    };
+
+    return retryWithBackoff(generate);
+};
+
+export const chatCodeSession = async (userPrompt) => {
+    console.log("API endpoint /api/code called");
+    const systemMessage = { role: "system", content: codeGenerationSystemPrompt };
+    const userMessage = { role: "user", content: userPrompt };
+
+    const generate = async () => {
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [systemMessage, userMessage],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.1,
+            max_tokens: 8192,
+            top_p: 0.9,
+            stream: false,
+            stop: null
+        });
+
+        const responseMessage = chatCompletion.choices[0].message.content;
+        return { response: { text: () => responseMessage } }; // Mimic the expected structure from Gemini
+    };
+
+    return retryWithBackoff(generate);
+};

@@ -18,7 +18,7 @@ export async function POST(request) {
         // Prepend a system prompt instructing a 5-10 line response.
         const modifiedPrompt = `${systemPrompt}\n\n${prompt}`;
 
-        const result = await chatSession.sendMessage(modifiedPrompt);
+        const result = await chatSession(modifiedPrompt);
         const generatedText = result.response.text();
 
         return new Response(
